@@ -10,11 +10,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "eval": "bunx promptfoo eval -c eval/promptfooconfig.yaml -j 50 --filter-providers prod",
-    "eval:staging": "bunx promptfoo eval -c eval/promptfooconfig.yaml -j 50 --filter-providers staging",
-    "eval:local": "bunx promptfoo eval -c eval/promptfooconfig.yaml -j 50 --filter-providers local --no-cache",
+    "eval":"bunx promptfoo eval -j 50 --filter-providers prod --no-cache",
+    "eval:staging": "bunx promptfoo eval -j 50 --filter-providers staging --no-cache",
+    "eval:local": "bunx promptfoo eval -j 50 --filter-providers local --no-cache",
     "eval:view": "bunx promptfoo view",
-    "eval:inspect": "bunx promptfoo eval -c eval/promptfooconfig.yaml -j 50 --filter-providers prod -o eval/output.html"
+    "eval:report": "bun scripts/report-evals.ts"
   },
   "dependencies": {
     "next": "^15.0.0",

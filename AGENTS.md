@@ -31,14 +31,20 @@ bun install
 |---------|-------------|
 | `bun run eval` | Evals vs prod (api.gamaliel.ai) |
 | `bun run eval:staging` | Evals vs staging |
-| `bun run eval:local` | Evals vs local API (api.localhost:8000); `--no-cache` |
+| `bun run eval:local` | Evals vs local API (api.localhost:8000) |
 | `bun run eval:view` | Open promptfoo web UI |
-| `bun run eval:inspect` | Run evals, write `eval/output.html` |
 | `bun run dev` | Next.js dev server |
 | `bun run build` | Production build |
 | `bun run lint` | Lint app |
 
-Output to file: append `-o <path>` (e.g. `-o /tmp/results.json` or `-o /tmp/results.html`).
+**Inspecting results:** Always output to JSON (`-o /tmp/results.json`), then run the report script:
+
+```bash
+bunx promptfoo eval -j 50 --filter-providers staging --no-cache -o /tmp/results.json \
+  && bun scripts/report-evals.ts /tmp/results.json
+```
+
+`scripts/report-evals.ts` prints a compact, LLM-readable report: summary stats, per-provider pass counts, and full details for each failure (prompt, vars, failed assertions, truncated response). Pass any results JSON file as the argument.
 
 Language suite only (different providers per bible_id):
 
@@ -53,14 +59,14 @@ For local evals: backend on 8000, `127.0.0.1 api.localhost` in `/etc/hosts`, and
 ## Conventions
 
 - Use Bun only for scripts (no Node).
-- Main config: `eval/promptfooconfig.yaml`. Language suite: `eval/configs/chat-language.yaml` (different providers per `bible_id`).
+- Main config: `promptfooconfig.yaml` (repo root; auto-discovered by promptfoo). Language suite: `eval/configs/chat-language.yaml` (different providers per `bible_id`).
 - Test suites: YAML in `eval/tests/`. Register new suites in the relevant config.
 - When adding suites or changing providers, update `docs/port-status.md`.
 
 ## Adding or changing evals
 
 1. Add or edit YAML in `eval/tests/`.
-2. Same providers as main config → add test file to `eval/promptfooconfig.yaml` under `tests`.
+2. Same providers as main config → add test file to `promptfooconfig.yaml` under `tests`.
 3. Different providers (e.g. per bible_id) → add config in `eval/configs/` and run `bunx promptfoo eval -c eval/configs/<name>.yaml -j 50`.
 4. Update `docs/port-status.md`.
 

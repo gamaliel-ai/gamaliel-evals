@@ -4,7 +4,7 @@
 #
 # Default: run against production only (commandLineOptions.filterProviders below).
 # To run the same suite against local: --filter-providers local
-#   e.g. bun run eval:local  or  bunx promptfoo eval -c eval/promptfooconfig.yaml --filter-providers local -j 50
+#   e.g. bun run eval:local  or  bunx promptfoo eval --filter-providers local -j 50
 #
 # Language evals: eval/configs/chat-language.yaml (different providers per bible_id).
 
@@ -57,5 +57,5 @@ defaultTest:
 
 # Theology/profile tests excluded from main suite until we have per-test passthrough (e.g. one provider per theology).
 tests:
-  - file://tests/smoke.yaml
-  - file://tests/passage_citation.yaml
+  - file://eval/tests/smoke.yaml
+  - file://eval/tests/passage_citation.yaml
