@@ -14,7 +14,7 @@ providers:
   - id: openai:chat:gpt-4o-mini:local
     provider: openai:chat:gpt-4o-mini
     config:
-      apiBaseUrl: "http://localhost:8000/v1"
+      apiBaseUrl: "http://api.localhost:8000/v1"
       passthrough:
         theology: default
         profile: universal_explorer

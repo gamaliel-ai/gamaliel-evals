@@ -6,12 +6,15 @@
     "bun": ">=1.3.0"
   },
   "scripts": {
-    "setup": "bun run scripts/check-env.ts && bun install",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "eval": "bun run scripts/check-env.ts && export $(grep -v '^#' .env | xargs) && bunx promptfoo eval -c eval/promptfooconfig.yaml"
+    "eval": "bunx promptfoo eval -c eval/promptfooconfig.yaml -j 50 --filter-providers prod",
+    "eval:staging": "bunx promptfoo eval -c eval/promptfooconfig.yaml -j 50 --filter-providers staging",
+    "eval:local": "bunx promptfoo eval -c eval/promptfooconfig.yaml -j 50 --filter-providers local --no-cache",
+    "eval:view": "bunx promptfoo view",
+    "eval:inspect": "bunx promptfoo eval -c eval/promptfooconfig.yaml -j 50 --filter-providers prod -o eval/output.html"
   },
   "dependencies": {
     "next": "^15.0.0",

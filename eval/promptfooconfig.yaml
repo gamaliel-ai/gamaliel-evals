@@ -1,50 +1,61 @@
-# Evals against Gamaliel Public API (and optionally OpenAI for comparison).
+# Evals against Gamaliel Public API.
+# One config: smoke + passage citation (and later theology, profile). Same tests, same assertions.
 # Requires OPENAI_API_KEY in environment (or .env when run via `bun run eval` from repo root).
-# See https://api.gamaliel.ai and promptfoo docs for provider options.
 #
-# How promptfoo separates concerns (reusability):
-#   - Config (this file): reusable "how to run" — prompt TEMPLATE (with {{ vars }}), providers, defaultTest.
-#   - Tests (file://tests/*.yaml): the actual scenarios — each test supplies vars (the concrete prompt text,
-#     theology, profile, etc.) and assert (criteria). So the prompt TEXT and criteria live in tests;
-#     the config only defines the template and which providers/defaults to use.
-#   - Prompt template: what you send to the LLM; placeholders like {{ prompt }} are filled from test vars.
-#   - Test case: vars (inputs to the template + provider passthrough) + assert (pass/fail criteria).
-#   So one config can be reused across many test files; each test owns "this question" + "these criteria".
+# Default: run against production only (commandLineOptions.filterProviders below).
+# To run the same suite against local: --filter-providers local
+#   e.g. bun run eval:local  or  bunx promptfoo eval -c eval/promptfooconfig.yaml --filter-providers local -j 50
 #
-# Providers: theology/profile matrix is per test (vars) or use providers-matrix for one provider per (theology, profile).
+# Language evals: eval/configs/chat-language.yaml (different providers per bible_id).
 
-# Parallelism: default is 4; evals are network-bound so raise this (e.g. 50–100) for speed.
 evaluateOptions:
   maxConcurrency: 50
 
-description: Smoke test – single question to Gamaliel API, loose assertion
+description: Chat evals – smoke + passage citation (Gamaliel API)
 
-# Prompt TEMPLATE: {{ prompt }} is filled from each test's vars (or defaultTest). The actual
-# question text ("What does the Bible say about love?", etc.) belongs in test cases, not here.
 prompts:
   - "{{ prompt }}"
 
+# Fixed passthrough (promptfoo does not substitute {{ var }} in provider passthrough; API was receiving literal "{{ theology }}").
+# Theology/profile suites (theology_compliance, profile_adaptation) need separate configs with one provider per theology/profile until promptfoo supports passthrough vars.
 providers:
-  # Gamaliel – OpenAI-compatible API (passthrough static for now; promptfoo may not template provider config with test vars)
-  - id: openai:chat:gpt-4o-mini
+  - id: openai:chat:gpt-4o-mini:prod
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
         theology: default
         profile: universal_explorer
-  # Local Gamaliel backend for debugging (run main repo: make dev)
-  - id: openai:chat:gpt-4o-mini:local
+        bible_id: eng-web
+  - id: openai:chat:gpt-4o-mini:staging
     provider: openai:chat:gpt-4o-mini
     config:
-      apiBaseUrl: "http://localhost:8000/v1"
+      apiBaseUrl: "https://api.staging.gamaliel.ai/v1"
       passthrough:
         theology: default
         profile: universal_explorer
+        bible_id: eng-web
+  - id: openai:chat:gpt-4o-mini:local
+    provider: openai:chat:gpt-4o-mini
+    config:
+      apiBaseUrl: "http://api.localhost:8000/v1"
+      passthrough:
+        model: gpt-4o-mini
+        theology: default
+        profile: universal_explorer
+        bible_id: eng-web
 
 defaultTest:
   vars:
     prompt: "What does the Bible say about love?"
     theology: default
     profile: universal_explorer
+    bible_id: eng-web
 
-tests: file://tests/smoke.yaml
+# Run against prod by default: --filter-providers prod.
+# Run against staging: --filter-providers staging
+# Run against local: --filter-providers local
+
+# Theology/profile tests excluded from main suite until we have per-test passthrough (e.g. one provider per theology).
+tests:
+  - file://tests/smoke.yaml
+  - file://tests/passage_citation.yaml

@@ -1,0 +1,126 @@
+# Theology compliance – ported from evals/chat_agent/test_cases/theology_compliance.json
+# vars: prompt, theology (profile comes from defaultTest in main config). Assertions: llm-rubric.
+# --- Reformed ---
+- description: Reformed theology – salvation should emphasize God's sovereignty and election
+  vars:
+    prompt: "How does someone get saved?"
+    theology: reformed
+  assert:
+    - type: llm-rubric
+      value: |
+        Reformed theology: response should align with Reformed soteriology.
+        PASS: Response emphasizes grace, faith, and/or God's role in salvation; does not present salvation as earned by works or primarily a matter of human free will choosing God.
+        FAIL: Response presents salvation as primarily human effort or works-based, or contradicts core Christian guardrails.
+
+- description: Reformed theology – should emphasize God's absolute sovereignty
+  vars:
+    prompt: "Does God control everything that happens?"
+    theology: reformed
+  assert:
+    - type: llm-rubric
+      value: |
+        Reformed theology: response should affirm God's sovereignty over all things.
+        PASS: Response affirms God's sovereignty, control, or will over creation/events; does not limit or deny God's sovereignty.
+        FAIL: Response suggests God does not control certain things or presents a hands-off view of providence.
+
+- description: Reformed theology – should emphasize Scripture alone as final authority
+  vars:
+    prompt: "What is the authority of the Bible?"
+    theology: reformed
+  assert:
+    - type: llm-rubric
+      value: |
+        Reformed theology: response should emphasize Scripture as final authority.
+        PASS: Response emphasizes Scripture as final, sole, or sufficient authority for faith and practice; does not place Tradition or Magisterium as equal to Scripture.
+        FAIL: Response gives Tradition or church authority equal or superior standing to Scripture.
+
+# --- Catholic ---
+- description: Catholic theology – should emphasize Tradition alongside Scripture, not Scripture alone
+  vars:
+    prompt: "What is the relationship between Scripture and Tradition?"
+    theology: catholic
+  assert:
+    - type: llm-rubric
+      value: |
+        Catholic theology: response should present Tradition alongside Scripture.
+        PASS: Response presents Tradition (and/or Magisterium) alongside Scripture as part of Christian faith; does not teach Scripture alone as the only authority.
+        FAIL: Response teaches Sola Scriptura or Tradition as subordinate to Scripture only.
+
+- description: Catholic theology – Eucharist should be described as Real Presence, not symbolic
+  vars:
+    prompt: "What happens during communion?"
+    theology: catholic
+  assert:
+    - type: llm-rubric
+      value: |
+        Catholic theology: response should describe the Eucharist as Real Presence.
+        PASS: Response describes communion as Christ's body and blood truly present (Real Presence), not merely symbolic.
+        FAIL: Response describes communion as only symbolic or remembrance only.
+
+# --- Default (both sides of debated topics) ---
+- description: Default theology – should present both complementarian and egalitarian views with scripture
+  vars:
+    prompt: "Christians disagree about women's roles in church leadership. What are the main views and what Scripture do they appeal to?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should present both sides of this debated topic.
+        PASS: Response acknowledges Christians disagree and presents both complementarian (e.g. 1 Timothy 2:12) and egalitarian (e.g. women in leadership, Galatians 3:28) views with some scriptural support; does not declare one position as the only biblical answer.
+        FAIL: Response presents only one position as the biblical view, dismisses one side without scriptural support, or frames the topic as settled.
+
+- description: Default theology – 1 Timothy passages should present both restrictive and egalitarian interpretations
+  vars:
+    prompt: "Christians disagree about whether 1 Timothy 2 and the elder lists mean women cannot be pastors. What are the main interpretations and what do they appeal to?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should present both interpretations of these passages.
+        PASS: Response acknowledges different interpretations and presents both the restrictive reading and the contextual/egalitarian reading with scriptural support; does not declare one as the only valid reading.
+        FAIL: Response presents only the complementarian interpretation as the clear teaching, or dismisses the egalitarian reading without support.
+
+- description: Default theology – should acknowledge legitimate disagreement and present both perspectives
+  vars:
+    prompt: "Can women serve as pastors? Christians disagree. What are the main views and what Scripture do they use?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should present both sides of this debated topic.
+        PASS: Response acknowledges disagreement and presents both complementarian and egalitarian views with scriptural support; does not declare one position as the only biblical answer.
+        FAIL: Response presents only one position as the biblical answer or dismisses one side without scriptural support.
+
+# --- Egalitarian (Anglican / Lutheran / Wesleyan) – one test per theology ---
+- description: Egalitarian (Anglican) – should acknowledge women in ministry as legitimate with scriptural examples
+  vars:
+    prompt: "Does the Bible support women serving as pastors and church leaders?"
+    theology: anglican
+  assert:
+    - type: llm-rubric
+      value: |
+        Egalitarian theologies (Anglican/Lutheran/Wesleyan): response should acknowledge women in ministry as legitimate.
+        PASS: Response affirms or acknowledges women in ministry/leadership and cites at least one scriptural example (e.g. Phoebe, Junia, Deborah, Galatians 3:28).
+        FAIL: Response flatly denies women can serve in leadership with no acknowledgment of debate or scriptural examples.
+
+- description: Egalitarian (Anglican) – 1 Timothy passages should support women in ordained ministry
+  vars:
+    prompt: "Does 1 Timothy 2:11-14 and the elder qualifications in 1 Timothy 3 and Titus 1 mean women cannot be pastors or elders?"
+    theology: anglican
+  assert:
+    - type: llm-rubric
+      value: |
+        Egalitarian theologies: response should support women in ordained ministry.
+        PASS: Response offers contextual or historical reading of these passages and concludes they do not prohibit women as pastors/elders; may acknowledge complementarian view but overall supports women in ministry.
+        FAIL: Response concludes these passages prohibit women from being pastors/elders or presents the restrictive reading as the definitive answer.
+
+- description: Egalitarian (Anglican) – should affirm women as bishops with scriptural and theological support
+  vars:
+    prompt: "Can women serve as bishops? What does the Bible teach about this?"
+    theology: anglican
+  assert:
+    - type: llm-rubric
+      value: |
+        Egalitarian theologies: response should affirm women as bishops.
+        PASS: Response affirms women can serve as bishops with scriptural or theological support; may mention other traditions but conclusion supports women as bishops.
+        FAIL: Response concludes women cannot or should not serve as bishops or presents the restriction as the correct biblical teaching.

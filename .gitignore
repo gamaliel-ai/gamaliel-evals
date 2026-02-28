@@ -12,6 +12,7 @@ out/
 
 # Eval / promptfoo (output, cache, local DB)
 eval/output/
+eval/output.html
 .promptfoo/
 **/.promptfoo/
 

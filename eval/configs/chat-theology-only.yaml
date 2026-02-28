@@ -1,0 +1,31 @@
+# Minimal config to run only theology_compliance tests (for DRY validation).
+# Same providers and defaultTest as main config.
+# Run: bunx promptfoo eval -c eval/configs/chat-theology-only.yaml --filter-providers local -j 50
+description: Chat evals – theology only (validation)
+
+prompts:
+  - "{{ prompt }}"
+
+evaluateOptions:
+  maxConcurrency: 50
+
+providers:
+  - id: openai:chat:gpt-4o-mini:local
+    provider: openai:chat:gpt-4o-mini
+    config:
+      apiBaseUrl: "http://api.localhost:8000/v1"
+      passthrough:
+        model: gpt-4o-mini
+        theology: "{{ theology }}"
+        profile: "{{ profile }}"
+        bible_id: "{{ bible_id }}"
+
+defaultTest:
+  vars:
+    prompt: "What does the Bible say about love?"
+    theology: default
+    profile: universal_explorer
+    bible_id: eng-web
+
+tests:
+  - file://../tests/theology_compliance.yaml

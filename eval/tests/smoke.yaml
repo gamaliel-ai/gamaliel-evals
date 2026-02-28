@@ -1,13 +1,10 @@
-# Smoke test: single question to Gamaliel API, loose assertion
-# Prompt text and criteria live here; config only provides the template and providers.
-# defaultTest in promptfooconfig sets prompt: "What does the Bible say about love?" and theology/profile.
-
+# Smoke test: single question to Gamaliel API, loose assertion.
+# defaultTest in config sets prompt/theology/profile.
 - description: Response mentions love (case-insensitive) – default theology
   assert:
     - type: icontains
       value: love
 
-# Override theology only; prompt comes from defaultTest.
 - description: Catholic theology – response should mention love (same assertion shape, theology from vars)
   vars:
     theology: catholic
@@ -24,7 +21,6 @@
     - type: icontains
       value: love
 
-# Example: different prompt and criteria in one test (tests own prompt + criteria).
 - description: Different question – response should reference Scripture
   vars:
     prompt: "How should a Christian treat their enemies?"
