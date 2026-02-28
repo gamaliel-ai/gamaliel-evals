@@ -1,0 +1,165 @@
+# Language compliance – ported from evals/chat_agent/test_cases/language_compliance.json
+# Each test sends a prompt with bible_id (translation context); we assert response is in the expected language.
+# NOTE: For the API to respond in the right language, bible_id must be sent per request (passthrough).
+# Current promptfoo may not template provider passthrough with test vars; if so, use static config or
+# per-test provider override until supported. With static passthrough (no bible_id), API returns default language.
+
+# Spanish – spa-niv-2022; require at least 3 Spanish indicators (Dios, amor, vida)
+- description: Spanish translation with English question – should respond in Spanish
+  vars:
+    prompt: "What does this verse mean?"
+    bible_id: spa-niv-2022
+  providers: [openai:chat:gpt-4o-mini:spa]
+  assert:
+    - type: contains
+      value: Dios
+    - type: contains
+      value: amor
+    - type: contains
+      value: vida
+
+- description: Spanish translation with Spanish question – should respond in Spanish
+  vars:
+    prompt: "¿Qué significa este versículo?"
+    bible_id: spa-niv-2022
+  providers: [openai:chat:gpt-4o-mini:spa]
+  assert:
+    - type: contains
+      value: Dios
+    - type: contains
+      value: amor
+    - type: contains
+      value: vida
+
+- description: Spanish translation with thematic English question – should respond in Spanish
+  vars:
+    prompt: "What does the Bible say about love?"
+    bible_id: spa-niv-2022
+  providers: [openai:chat:gpt-4o-mini:spa]
+  assert:
+    - type: contains
+      value: amor
+    - type: contains
+      value: Dios
+    - type: contains
+      value: vida
+
+# Korean – kor-niv-1985; require Korean script (Hangul)
+- description: Korean translation with English question – should respond in Korean
+  vars:
+    prompt: "What does this verse teach about God's love?"
+    bible_id: kor-niv-1985
+  providers: [openai:chat:gpt-4o-mini:kor]
+  assert:
+    - type: javascript
+      value: "/[\uAC00-\uD7AF]/.test(output)"
+
+- description: Korean translation with Korean question – should respond in Korean
+  vars:
+    prompt: "이 구절이 하나님의 사랑에 대해 무엇을 가르치나요?"
+    bible_id: kor-niv-1985
+  providers: [openai:chat:gpt-4o-mini:kor]
+  assert:
+    - type: javascript
+      value: "/[\uAC00-\uD7AF]/.test(output)"
+
+- description: Korean translation with thematic English question – should respond in Korean
+  vars:
+    prompt: "What does the Bible say about forgiveness?"
+    bible_id: kor-niv-1985
+  providers: [openai:chat:gpt-4o-mini:kor]
+  assert:
+    - type: javascript
+      value: "/[\uAC00-\uD7AF]/.test(output)"
+
+# Portuguese – por-niv-23; require at least 5 Portuguese indicators (Deus, amor, vida, para, que)
+- description: Portuguese question with Portuguese translation – should respond in Portuguese
+  vars:
+    prompt: "O que este versículo ensina sobre o amor de Deus?"
+    bible_id: por-niv-23
+  providers: [openai:chat:gpt-4o-mini:por]
+  assert:
+    - type: contains
+      value: Deus
+    - type: contains
+      value: amor
+    - type: contains
+      value: vida
+    - type: contains
+      value: para
+    - type: contains
+      value: que
+
+- description: Portuguese translation with English question – should respond in Portuguese
+  vars:
+    prompt: "What does this verse teach about God's love?"
+    bible_id: por-niv-23
+  providers: [openai:chat:gpt-4o-mini:por]
+  assert:
+    - type: contains
+      value: Deus
+    - type: contains
+      value: amor
+    - type: contains
+      value: vida
+    - type: contains
+      value: para
+    - type: contains
+      value: que
+
+- description: Portuguese translation with thematic English question – should respond in Portuguese
+  vars:
+    prompt: "What does the Bible say about prayer?"
+    bible_id: por-niv-23
+  providers: [openai:chat:gpt-4o-mini:por]
+  assert:
+    - type: contains
+      value: Deus
+    - type: contains
+      value: amor
+    - type: contains
+      value: vida
+    - type: contains
+      value: para
+    - type: contains
+      value: que
+
+# User preference fallback (bible_id from user translation)
+- description: User preferred translation (Portuguese) used as fallback when bible_id from preference
+  vars:
+    prompt: "O que este versículo ensina sobre o amor de Deus?"
+    bible_id: por-niv-23
+  providers: [openai:chat:gpt-4o-mini:por]
+  assert:
+    - type: contains
+      value: Deus
+    - type: contains
+      value: amor
+    - type: contains
+      value: vida
+    - type: contains
+      value: para
+    - type: contains
+      value: que
+
+- description: User preferred translation (Spanish) used as fallback when bible_id from preference
+  vars:
+    prompt: "¿Qué significa este versículo?"
+    bible_id: spa-niv-2022
+  providers: [openai:chat:gpt-4o-mini:spa]
+  assert:
+    - type: contains
+      value: Dios
+    - type: contains
+      value: amor
+    - type: contains
+      value: vida
+
+- description: User preferred translation (Korean) used as fallback when bible_id from preference
+  vars:
+    prompt: "이 구절이 무엇을 의미하나요?"
+    bible_id: kor-niv-1985
+  providers: [openai:chat:gpt-4o-mini:kor]
+  assert:
+    - type: javascript
+      value: "/[\uAC00-\uD7AF]/.test(output)"

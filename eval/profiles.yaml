@@ -1,0 +1,10 @@
+# Profile IDs (must match gamaliel-prompts/profiles/*.yml slug or stem)
+# Used to generate the provider matrix. Update when adding profiles.
+profiles:
+  - universal_explorer
+  - biblical_scholar
+  - spiritual_seeker
+  - growing_christian
+  - new_believer
+  - mature_believer
+  - curious_explorer

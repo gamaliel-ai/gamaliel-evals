@@ -1,24 +1,50 @@
-# Hello-world eval against Gamaliel Public API.
+# Evals against Gamaliel Public API (and optionally OpenAI for comparison).
 # Requires OPENAI_API_KEY in environment (or .env when run via `bun run eval` from repo root).
 # See https://api.gamaliel.ai and promptfoo docs for provider options.
+#
+# How promptfoo separates concerns (reusability):
+#   - Config (this file): reusable "how to run" — prompt TEMPLATE (with {{ vars }}), providers, defaultTest.
+#   - Tests (file://tests/*.yaml): the actual scenarios — each test supplies vars (the concrete prompt text,
+#     theology, profile, etc.) and assert (criteria). So the prompt TEXT and criteria live in tests;
+#     the config only defines the template and which providers/defaults to use.
+#   - Prompt template: what you send to the LLM; placeholders like {{ prompt }} are filled from test vars.
+#   - Test case: vars (inputs to the template + provider passthrough) + assert (pass/fail criteria).
+#   So one config can be reused across many test files; each test owns "this question" + "these criteria".
+#
+# Providers: theology/profile matrix is per test (vars) or use providers-matrix for one provider per (theology, profile).
+
+# Parallelism: default is 4; evals are network-bound so raise this (e.g. 50–100) for speed.
+evaluateOptions:
+  maxConcurrency: 50
 
 description: Smoke test – single question to Gamaliel API, loose assertion
 
+# Prompt TEMPLATE: {{ prompt }} is filled from each test's vars (or defaultTest). The actual
+# question text ("What does the Bible say about love?", etc.) belongs in test cases, not here.
 prompts:
-  - "What does the Bible say about love?"
+  - "{{ prompt }}"
 
 providers:
+  # Gamaliel – OpenAI-compatible API (passthrough static for now; promptfoo may not template provider config with test vars)
   - id: openai:chat:gpt-4o-mini
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
-      # OPENAI_API_KEY from env (BYOK)
-      # Optional Gamaliel params (passthrough to API):
+      passthrough:
+        theology: default
+        profile: universal_explorer
+  # Local Gamaliel backend for debugging (run main repo: make dev)
+  - id: openai:chat:gpt-4o-mini:local
+    provider: openai:chat:gpt-4o-mini
+    config:
+      apiBaseUrl: "http://localhost:8000/v1"
       passthrough:
         theology: default
         profile: universal_explorer
 
-tests:
-  - description: Response mentions love (case-insensitive)
-    assert:
-      - type: icontains
-        value: love
+defaultTest:
+  vars:
+    prompt: "What does the Bible say about love?"
+    theology: default
+    profile: universal_explorer
+
+tests: file://tests/smoke.yaml

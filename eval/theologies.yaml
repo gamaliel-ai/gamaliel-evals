@@ -1,0 +1,12 @@
+# Theology IDs (must match gamaliel-prompts/theologies/*.yml stem names)
+# Used to generate the provider matrix. Update when adding theologies.
+theologies:
+  - default
+  - catholic
+  - anglican
+  - lutheran
+  - eastern_orthodox
+  - baptist
+  - charismatic
+  - reformed
+  - wesleyan

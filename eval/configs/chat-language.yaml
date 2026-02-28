@@ -1,0 +1,52 @@
+# Language compliance – one provider per language so the API gets the right bible_id (no templating).
+# Run: bunx promptfoo eval -c eval/configs/chat-language.yaml -j 50
+# Local: use providers [openai:chat:gpt-4o-mini:local] and run Gamaliel with make dev (main repo).
+description: Chat – Language compliance (Gamaliel API)
+
+prompts:
+  - "{{ prompt }}"
+
+evaluateOptions:
+  maxConcurrency: 50
+
+providers:
+  # Local Gamaliel backend for debugging (run main repo: make dev)
+  - id: openai:chat:gpt-4o-mini:local
+    provider: openai:chat:gpt-4o-mini
+    config:
+      apiBaseUrl: "http://localhost:8000/v1"
+      passthrough:
+        theology: default
+        profile: universal_explorer
+        bible_id: eng-web
+  - id: openai:chat:gpt-4o-mini:spa
+    provider: openai:chat:gpt-4o-mini
+    config:
+      apiBaseUrl: "https://api.gamaliel.ai/v1"
+      passthrough:
+        theology: default
+        profile: universal_explorer
+        bible_id: spa-niv-2022
+  - id: openai:chat:gpt-4o-mini:kor
+    provider: openai:chat:gpt-4o-mini
+    config:
+      apiBaseUrl: "https://api.gamaliel.ai/v1"
+      passthrough:
+        theology: default
+        profile: universal_explorer
+        bible_id: kor-niv-1985
+  - id: openai:chat:gpt-4o-mini:por
+    provider: openai:chat:gpt-4o-mini
+    config:
+      apiBaseUrl: "https://api.gamaliel.ai/v1"
+      passthrough:
+        theology: default
+        profile: universal_explorer
+        bible_id: por-niv-23
+
+defaultTest:
+  vars:
+    theology: default
+    profile: universal_explorer
+
+tests: file://../tests/language_compliance.yaml
