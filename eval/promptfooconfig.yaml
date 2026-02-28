@@ -1,0 +1,24 @@
+# Hello-world eval against Gamaliel Public API.
+# Requires OPENAI_API_KEY in environment (or .env when run via `bun run eval` from repo root).
+# See https://api.gamaliel.ai and promptfoo docs for provider options.
+
+description: Smoke test – single question to Gamaliel API, loose assertion
+
+prompts:
+  - "What does the Bible say about love?"
+
+providers:
+  - id: openai:chat:gpt-4o-mini
+    config:
+      apiBaseUrl: "https://api.gamaliel.ai/v1"
+      # OPENAI_API_KEY from env (BYOK)
+      # Optional Gamaliel params (passthrough to API):
+      passthrough:
+        theology: default
+        profile: universal_explorer
+
+tests:
+  - description: Response mentions love (case-insensitive)
+    assert:
+      - type: icontains
+        value: love

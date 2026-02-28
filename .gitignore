@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Env (never commit keys)
+.env
+.env.local
+.env.*.local
+
+# Next.js
+.next/
+out/
+
+# Eval / promptfoo (output, cache, local DB)
+eval/output/
+.promptfoo/
+**/.promptfoo/
+
+# Vercel
+.vercel
+
+# Logs and debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+bun-debug.log*
+
+# Cache (various tools)
+.cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
