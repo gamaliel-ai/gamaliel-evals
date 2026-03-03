@@ -21,10 +21,22 @@ bun install
 ## Running evals
 
 ```bash
-bun run eval            # prod (api.gamaliel.ai)
-bun run eval:staging    # staging
-bun run eval:local      # local API (api.localhost:8000)
-bun run eval:view       # open promptfoo web UI
+bun run eval                 # prod (api.gamaliel.ai)
+bun run eval:staging         # staging
+bun run eval:local          # local API (api.localhost:8000)
+bun run eval:openai         # OpenAI GPT-4o-mini (passage citation only, for comparison)
+bun run eval:smoke          # smoke tests (prod)
+bun run eval:smoke:staging  # smoke tests (staging)
+bun run eval:smoke:local    # smoke tests (local)
+bun run eval:view           # open promptfoo web UI
+bun run eval:report         # generate report from JSON results
+```
+
+**Other commands:**
+```bash
+bun run dev     # Next.js dev server
+bun run build   # production build
+bun run lint    # lint app
 ```
 
 See [AGENTS.md](./AGENTS.md) for full documentation.
