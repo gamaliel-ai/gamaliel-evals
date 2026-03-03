@@ -15,6 +15,7 @@ eval/output/
 eval/output.html
 .promptfoo/
 **/.promptfoo/
+evalLastWritten
 
 # Vercel
 .vercel

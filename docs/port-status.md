@@ -11,12 +11,13 @@ This doc tracks porting **internal ChatAgent evals** (`evals/chat_agent*`, main 
 | **Eval suites in place** | 5 (smoke, passage-citation, theology, profile, language) |
 | **Test files** | 5 (`smoke.yaml`, `passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `language_compliance.yaml`) |
 | **Total test cases** | ~100+ (1 smoke + 21 passage citation + 11 theology + 16 profile + 12 language) |
-| **Configs** | **Three configs:** `promptfooconfig.yaml` (production), `promptfooconfig.staging.yaml` (internal), `promptfooconfig.local.yaml` (internal) |
+| **Configs** | **Four configs:** `promptfooconfig.yaml` (production), `promptfooconfig.staging.yaml` (internal), `promptfooconfig.local.yaml` (internal), `promptfooconfig.openai.yaml` (comparison) |
 | **Default `bun run eval`** | Runs full suite against **production** (all tests × 1 provider). |
 | **Run against staging** | `bun run eval:staging` or `-c promptfooconfig.staging.yaml` |
 | **Run against local** | `bun run eval:local` or `-c promptfooconfig.local.yaml` |
+| **Run against OpenAI** | `bun run eval:openai` or `-c promptfooconfig.openai.yaml` (passage citation only) |
 
-**Architecture:** Tests are **provider-agnostic** (no hardcoded providers). All tests work with any config via template variables (`theology`, `profile`, `bible_id` from test vars). Separate config files for each environment (prod/staging/local) define the provider endpoint.
+**Architecture:** Tests are **provider-agnostic** (no hardcoded providers). Gamaliel configs (prod/staging/local) use template variables (`theology`, `profile`, `bible_id` from test vars). OpenAI config only includes general tests that don't require Gamaliel-specific parameters. Separate config files for each environment/comparison define the provider endpoint.
 
 ---
 
@@ -67,20 +68,22 @@ We **port** evals that only need **prompt + response (+ theology/profile/bible_i
 
 ## Config Architecture
 
-**Three separate config files** (one per environment):
+**Four separate config files** (three for environments, one for comparison):
 
 - **`promptfooconfig.yaml`** - Production (default, auto-discovered by promptfoo)
 - **`promptfooconfig.staging.yaml`** - Staging (internal use only)
 - **`promptfooconfig.local.yaml`** - Local development (internal use only)
+- **`promptfooconfig.openai.yaml`** - OpenAI GPT-4.1 comparison (passage citation only, excludes Gamaliel-specific tests)
 
 **Key design decisions:**
 
 1. **Provider-agnostic tests:** All test files have **no hardcoded providers**. They use template variables (`theology`, `profile`, `bible_id`) from test vars.
-2. **HTTP providers:** All configs use HTTP providers with URLs as provider IDs (required by promptfoo).
-3. **Template variables:** Provider configs use `{{ theology | default('default') }}`, `{{ profile | default('universal_explorer') }}`, `{{ bible_id | default('eng-web') }}` to pick up values from test vars.
-4. **Same test suite:** All configs reference the same test files, ensuring consistency across environments.
+2. **HTTP providers:** Gamaliel configs (prod/staging/local) use HTTP providers with URLs as provider IDs (required by promptfoo).
+3. **OpenAI provider:** OpenAI config uses native `openai:chat:gpt-4.1` provider (no Gamaliel-specific params).
+4. **Template variables:** Gamaliel provider configs use `{{ theology | default('default') }}`, `{{ profile | default('universal_explorer') }}`, `{{ bible_id | default('eng-web') }}` to pick up values from test vars.
+5. **Test suite selection:** Gamaliel configs reference all test files. OpenAI config only includes `passage_citation.yaml` (excludes tests requiring `theology`, `profile`, `bible_id` params).
 
-**Why separate configs:** Each environment has a different API endpoint. Using separate configs makes it clear which environment you're testing against and allows different settings per environment if needed.
+**Why separate configs:** Each environment has a different API endpoint. OpenAI config enables comparison with standard OpenAI while excluding Gamaliel-specific functionality. Using separate configs makes it clear which environment/comparison you're testing against.
 
 ---
 
@@ -91,6 +94,7 @@ gamaliel-evals/
 ├── promptfooconfig.yaml              # Production config (default)
 ├── promptfooconfig.staging.yaml      # Staging config (internal)
 ├── promptfooconfig.local.yaml        # Local config (internal)
+├── promptfooconfig.openai.yaml       # OpenAI comparison config (passage citation only)
 ├── eval/
 │   ├── tests/
 │   │   ├── smoke.yaml                # 1 test - quick validation
@@ -121,6 +125,9 @@ bun run eval:staging
 
 # Local (internal - requires backend running)
 bun run eval:local
+
+# OpenAI comparison (passage citation only)
+bun run eval:openai
 
 # Smoke tests only
 bun run eval:smoke                    # Production
@@ -177,6 +184,7 @@ bun run eval:report /tmp/results.json
 | 1 | `promptfooconfig.yaml` | ✅ Done | **Production config:** All test files, HTTP provider with template variables |
 | 2 | `promptfooconfig.staging.yaml` | ✅ Done | **Staging config:** Same tests, staging endpoint (internal) |
 | 3 | `promptfooconfig.local.yaml` | ✅ Done | **Local config:** Same tests, local endpoint (internal) |
+| 4 | `promptfooconfig.openai.yaml` | ✅ Done | **OpenAI comparison:** Passage citation only, native OpenAI provider (excludes Gamaliel-specific tests) |
 
 ---
 

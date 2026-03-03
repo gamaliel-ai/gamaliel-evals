@@ -32,6 +32,7 @@ bun install
 | `bun run eval` | Evals vs prod (api.gamaliel.ai) |
 | `bun run eval:staging` | Evals vs staging |
 | `bun run eval:local` | Evals vs local API (api.localhost:8000) |
+| `bun run eval:openai` | Evals vs OpenAI GPT-4.1 (passage citation only, for comparison) |
 | `bun run eval:view` | Open promptfoo web UI |
 | `bun run dev` | Next.js dev server |
 | `bun run build` | Production build |
@@ -55,8 +56,9 @@ For local evals: backend on 8000, `127.0.0.1 api.localhost` in `/etc/hosts`, and
 ## Conventions
 
 - Use Bun only for scripts (no Node).
-- Main config: `promptfooconfig.yaml` (repo root; auto-discovered by promptfoo). Separate configs: `promptfooconfig.staging.yaml` and `promptfooconfig.local.yaml` for internal use.
+- Main config: `promptfooconfig.yaml` (repo root; auto-discovered by promptfoo). Separate configs: `promptfooconfig.staging.yaml`, `promptfooconfig.local.yaml`, and `promptfooconfig.openai.yaml` for different environments.
 - Test suites: YAML in `eval/tests/`. Register new suites in the relevant config.
+- OpenAI config (`promptfooconfig.openai.yaml`): Only includes `passage_citation.yaml` tests (general prompts). Excludes tests requiring Gamaliel-specific params (`theology`, `profile`, `bible_id`, etc.).
 - When adding suites or changing providers, update `docs/port-status.md`.
 
 ## Adding or changing evals
@@ -141,8 +143,10 @@ Want to run specific tests?
 - **Main config:** `promptfooconfig.yaml` (production) - auto-discovered, use `bun run eval`
 - **Staging config:** `promptfooconfig.staging.yaml` (internal) - use `bun run eval:staging` or `-c promptfooconfig.staging.yaml`
 - **Local config:** `promptfooconfig.local.yaml` (internal) - use `bun run eval:local` or `-c promptfooconfig.local.yaml`
+- **OpenAI config:** `promptfooconfig.openai.yaml` (comparison) - use `bun run eval:openai` or `-c promptfooconfig.openai.yaml`. Only includes `passage_citation.yaml` (excludes tests requiring Gamaliel-specific params).
 - **Test files:** `passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `language_compliance.yaml`, `smoke.yaml`
-- **All tests are provider-agnostic** - no hardcoded providers, work with any config via template variables (theology, profile, bible_id from test vars)
+- **Gamaliel configs:** All tests are provider-agnostic and work via template variables (theology, profile, bible_id from test vars)
+- **OpenAI config:** Only general tests that don't require Gamaliel-specific parameters
 
 ## Scope vs main repo
 

@@ -13,6 +13,7 @@
     "eval": "bunx promptfoo eval -j 50 --no-cache",
     "eval:staging": "bunx promptfoo eval -c promptfooconfig.staging.yaml -j 50 --no-cache",
     "eval:local": "bunx promptfoo eval -c promptfooconfig.local.yaml -j 50 --no-cache",
+    "eval:openai": "bunx promptfoo eval -c promptfooconfig.openai.yaml -j 50 --no-cache",
     "eval:smoke": "bunx promptfoo eval --tests eval/tests/smoke.yaml -j 50 --no-cache",
     "eval:smoke:staging": "bunx promptfoo eval -c promptfooconfig.staging.yaml --tests eval/tests/smoke.yaml -j 50 --no-cache",
     "eval:smoke:local": "bunx promptfoo eval -c promptfooconfig.local.yaml --tests eval/tests/smoke.yaml -j 50 --no-cache",

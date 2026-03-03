@@ -1,0 +1,32 @@
+# Evals against OpenAI GPT-4.1 (for comparison with Gamaliel).
+# Subset of tests: only passage citation (general prompts without Gamaliel-specific params).
+# Excludes: theology_compliance, profile_adaptation, language_compliance (these use Gamaliel-specific params).
+# Requires OPENAI_API_KEY in environment (or .env when run via `bun run eval:openai` from repo root).
+
+# Validate required environment variables before running tests
+extensions:
+  - file://eval/validate-env.js:extensionHook
+
+evaluateOptions:
+  maxConcurrency: 50
+
+description: Chat evals – passage citation only (OpenAI GPT-4.1 for comparison)
+
+prompts:
+  - "{{ prompt }}"
+
+# OpenAI provider - standard OpenAI API, no Gamaliel-specific params
+providers:
+  - openai:chat:gpt-4o-mini
+
+defaultTest:
+  vars:
+    prompt: "What does the Bible say about love?"
+
+# Subset of tests - only general passage citation tests
+# Excludes tests that require Gamaliel-specific params:
+# - theology_compliance.yaml (uses theology param)
+# - profile_adaptation.yaml (uses profile param)
+# - language_compliance.yaml (uses bible_id param)
+tests:
+  - file://eval/tests/passage_citation.yaml

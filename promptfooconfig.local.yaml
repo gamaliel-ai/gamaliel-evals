@@ -49,3 +49,4 @@ tests:
   - file://eval/tests/theology_compliance.yaml
   - file://eval/tests/profile_adaptation.yaml
   - file://eval/tests/language_compliance.yaml
+  - file://eval/tests/nicene_guardrails.yaml
