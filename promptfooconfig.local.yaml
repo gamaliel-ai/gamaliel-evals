@@ -1,6 +1,7 @@
-# Evals against Gamaliel Public API (Production).
+# Evals against Gamaliel API on a local development server (Internal gamailel development use only).
 # Full suite: passage citation, theology compliance, profile adaptation, language compliance.
-# Requires OPENAI_API_KEY in environment (or .env when run via `bun run eval` from repo root).
+# Requires OPENAI_API_KEY in environment and local backend running on api.localhost:8000.
+# Run with: bunx promptfoo eval -c promptfooconfig.local.yaml -j 50
 
 # Validate required environment variables before running tests
 extensions:
@@ -9,17 +10,17 @@ extensions:
 evaluateOptions:
   maxConcurrency: 50
 
-description: Chat evals – full suite (Gamaliel API Production)
+description: Chat evals – full suite (Gamaliel API Local - Internal)
 
 prompts:
   - "{{ prompt }}"
 
-# Production HTTP provider - uses template variables from test vars
+# Local HTTP provider - uses template variables from test vars
 providers:
-  - id: "https://api.gamaliel.ai/v1/chat/completions"
+  - id: "http://api.localhost:8000/v1/chat/completions"
     provider: http
     config:
-      url: "https://api.gamaliel.ai/v1/chat/completions"
+      url: "http://api.localhost:8000/v1/chat/completions"
       method: POST
       headers:
         Content-Type: "application/json"

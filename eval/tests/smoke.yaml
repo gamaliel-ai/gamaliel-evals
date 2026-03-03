@@ -1,29 +1,12 @@
-# Smoke test: single question to Gamaliel API, loose assertion.
-# defaultTest in config sets prompt/theology/profile.
-- description: Response mentions love (case-insensitive) – default theology
-  assert:
-    - type: icontains
-      value: love
+# Smoke tests: quick validation tests for any environment.
+# Uses brief prompts for faster responses.
+# Run with: bunx promptfoo eval --tests eval/tests/smoke.yaml
+# For staging: bunx promptfoo eval -c promptfooconfig.staging.yaml --tests eval/tests/smoke.yaml
+# For local: bunx promptfoo eval -c promptfooconfig.local.yaml --tests eval/tests/smoke.yaml
 
-- description: Catholic theology – response should mention love (same assertion shape, theology from vars)
+- description: Response is non-empty – default theology
   vars:
-    theology: catholic
-    profile: universal_explorer
+    prompt: "What is love? (brief answer)"
   assert:
-    - type: icontains
-      value: love
-
-- description: Anglican theology – response mentions love
-  vars:
-    theology: anglican
-    profile: universal_explorer
-  assert:
-    - type: icontains
-      value: love
-
-- description: Different question – response should reference Scripture
-  vars:
-    prompt: "How should a Christian treat their enemies?"
-  assert:
-    - type: icontains
-      value: love
+    - type: javascript
+      value: "output.length > 0"

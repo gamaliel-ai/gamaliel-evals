@@ -1,6 +1,6 @@
-# Evals against Gamaliel Public API (Production).
+# Evals against Gamaliel API on the staging environment (gamaliel development only).
 # Full suite: passage citation, theology compliance, profile adaptation, language compliance.
-# Requires OPENAI_API_KEY in environment (or .env when run via `bun run eval` from repo root).
+# Requires OPENAI_API_KEY in environment (or .env when run via `bun run eval:staging` from repo root).
 
 # Validate required environment variables before running tests
 extensions:
@@ -9,17 +9,17 @@ extensions:
 evaluateOptions:
   maxConcurrency: 50
 
-description: Chat evals – full suite (Gamaliel API Production)
+description: Chat evals – full suite (Gamaliel API Staging - Internal)
 
 prompts:
   - "{{ prompt }}"
 
-# Production HTTP provider - uses template variables from test vars
+# Staging HTTP provider - uses template variables from test vars
 providers:
-  - id: "https://api.gamaliel.ai/v1/chat/completions"
+  - id: "https://api.staging.gamaliel.ai/v1/chat/completions"
     provider: http
     config:
-      url: "https://api.gamaliel.ai/v1/chat/completions"
+      url: "https://api.staging.gamaliel.ai/v1/chat/completions"
       method: POST
       headers:
         Content-Type: "application/json"

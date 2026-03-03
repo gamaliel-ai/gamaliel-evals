@@ -3,163 +3,106 @@
 # NOTE: For the API to respond in the right language, bible_id must be sent per request (passthrough).
 # Current promptfoo may not template provider passthrough with test vars; if so, use static config or
 # per-test provider override until supported. With static passthrough (no bible_id), API returns default language.
+#
+# Language detection uses llm-rubric for robustness (avoids brittle hardcoded word lists).
+# Korean tests use JavaScript regex for Hangul script detection (reliable and fast).
 
-# Spanish – spa-niv-2022; require at least 3 Spanish indicators (Dios, amor, vida)
+# Spanish – spa-niv-2022; use LLM to detect Spanish language
 - description: Spanish translation with English question – should respond in Spanish
   vars:
-    prompt: "What does this verse mean?"
+    prompt: "What does this verse mean? (max 20 words)"
     bible_id: spa-niv-2022
-  providers: [openai:chat:gpt-4o-mini:spa]
   assert:
-    - type: contains
-      value: Dios
-    - type: contains
-      value: amor
-    - type: contains
-      value: vida
+    - type: llm-rubric
+      value: "The response should be written entirely in Spanish. Score 1.0 if the response is clearly in Spanish, 0.5 if it's mostly Spanish with some English, 0 if it's primarily in English or another language."
 
 - description: Spanish translation with Spanish question – should respond in Spanish
   vars:
-    prompt: "¿Qué significa este versículo?"
+    prompt: "¿Qué significa este versículo? (máximo 20 palabras)"
     bible_id: spa-niv-2022
-  providers: [openai:chat:gpt-4o-mini:spa]
   assert:
-    - type: contains
-      value: Dios
-    - type: contains
-      value: amor
-    - type: contains
-      value: vida
+    - type: llm-rubric
+      value: "The response should be written entirely in Spanish. Score 1.0 if the response is clearly in Spanish, 0.5 if it's mostly Spanish with some English, 0 if it's primarily in English or another language."
 
 - description: Spanish translation with thematic English question – should respond in Spanish
   vars:
-    prompt: "What does the Bible say about love?"
+    prompt: "What does the Bible say about love? (max 20 words)"
     bible_id: spa-niv-2022
-  providers: [openai:chat:gpt-4o-mini:spa]
   assert:
-    - type: contains
-      value: amor
-    - type: contains
-      value: Dios
-    - type: contains
-      value: vida
+    - type: llm-rubric
+      value: "The response should be written entirely in Spanish. Score 1.0 if the response is clearly in Spanish, 0.5 if it's mostly Spanish with some English, 0 if it's primarily in English or another language."
 
 # Korean – kor-niv-1985; require Korean script (Hangul)
 - description: Korean translation with English question – should respond in Korean
   vars:
-    prompt: "What does this verse teach about God's love?"
+    prompt: "What does this verse teach about God's love? (max 20 words)"
     bible_id: kor-niv-1985
-  providers: [openai:chat:gpt-4o-mini:kor]
   assert:
     - type: javascript
       value: "/[\uAC00-\uD7AF]/.test(output)"
 
 - description: Korean translation with Korean question – should respond in Korean
   vars:
-    prompt: "이 구절이 하나님의 사랑에 대해 무엇을 가르치나요?"
+    prompt: "이 구절이 하나님의 사랑에 대해 무엇을 가르치나요? (최대 20단어)"
     bible_id: kor-niv-1985
-  providers: [openai:chat:gpt-4o-mini:kor]
   assert:
     - type: javascript
       value: "/[\uAC00-\uD7AF]/.test(output)"
 
 - description: Korean translation with thematic English question – should respond in Korean
   vars:
-    prompt: "What does the Bible say about forgiveness?"
+    prompt: "What does the Bible say about forgiveness? (max 20 words)"
     bible_id: kor-niv-1985
-  providers: [openai:chat:gpt-4o-mini:kor]
   assert:
     - type: javascript
       value: "/[\uAC00-\uD7AF]/.test(output)"
 
-# Portuguese – por-niv-23; require at least 5 Portuguese indicators (Deus, amor, vida, para, que)
+# Portuguese – por-niv-23; use LLM to detect Portuguese language
 - description: Portuguese question with Portuguese translation – should respond in Portuguese
   vars:
-    prompt: "O que este versículo ensina sobre o amor de Deus?"
+    prompt: "O que este versículo ensina sobre o amor de Deus? (máximo 20 palavras)"
     bible_id: por-niv-23
-  providers: [openai:chat:gpt-4o-mini:por]
   assert:
-    - type: contains
-      value: Deus
-    - type: contains
-      value: amor
-    - type: contains
-      value: vida
-    - type: contains
-      value: para
-    - type: contains
-      value: que
+    - type: llm-rubric
+      value: "The response should be written entirely in Portuguese. Score 1.0 if the response is clearly in Portuguese, 0.5 if it's mostly Portuguese with some English, 0 if it's primarily in English or another language."
 
 - description: Portuguese translation with English question – should respond in Portuguese
   vars:
-    prompt: "What does this verse teach about God's love?"
+    prompt: "What does this verse teach about God's love? (max 20 words)"
     bible_id: por-niv-23
-  providers: [openai:chat:gpt-4o-mini:por]
   assert:
-    - type: contains
-      value: Deus
-    - type: contains
-      value: amor
-    - type: contains
-      value: vida
-    - type: contains
-      value: para
-    - type: contains
-      value: que
+    - type: llm-rubric
+      value: "The response should be written entirely in Portuguese. Score 1.0 if the response is clearly in Portuguese, 0.5 if it's mostly Portuguese with some English, 0 if it's primarily in English or another language."
 
 - description: Portuguese translation with thematic English question – should respond in Portuguese
   vars:
-    prompt: "What does the Bible say about prayer?"
+    prompt: "What does the Bible say about prayer? (max 20 words)"
     bible_id: por-niv-23
-  providers: [openai:chat:gpt-4o-mini:por]
   assert:
-    - type: contains
-      value: Deus
-    - type: contains
-      value: amor
-    - type: contains
-      value: vida
-    - type: contains
-      value: para
-    - type: contains
-      value: que
+    - type: llm-rubric
+      value: "The response should be written entirely in Portuguese. Score 1.0 if the response is clearly in Portuguese, 0.5 if it's mostly Portuguese with some English, 0 if it's primarily in English or another language."
 
 # User preference fallback (bible_id from user translation)
 - description: User preferred translation (Portuguese) used as fallback when bible_id from preference
   vars:
-    prompt: "O que este versículo ensina sobre o amor de Deus?"
+    prompt: "O que este versículo ensina sobre o amor de Deus? (máximo 20 palavras)"
     bible_id: por-niv-23
-  providers: [openai:chat:gpt-4o-mini:por]
   assert:
-    - type: contains
-      value: Deus
-    - type: contains
-      value: amor
-    - type: contains
-      value: vida
-    - type: contains
-      value: para
-    - type: contains
-      value: que
+    - type: llm-rubric
+      value: "The response should be written entirely in Portuguese. Score 1.0 if the response is clearly in Portuguese, 0.5 if it's mostly Portuguese with some English, 0 if it's primarily in English or another language."
 
 - description: User preferred translation (Spanish) used as fallback when bible_id from preference
   vars:
-    prompt: "¿Qué significa este versículo?"
+    prompt: "¿Qué significa este versículo? (máximo 20 palabras)"
     bible_id: spa-niv-2022
-  providers: [openai:chat:gpt-4o-mini:spa]
   assert:
-    - type: contains
-      value: Dios
-    - type: contains
-      value: amor
-    - type: contains
-      value: vida
+    - type: llm-rubric
+      value: "The response should be written entirely in Spanish. Score 1.0 if the response is clearly in Spanish, 0.5 if it's mostly Spanish with some English, 0 if it's primarily in English or another language."
 
 - description: User preferred translation (Korean) used as fallback when bible_id from preference
   vars:
-    prompt: "이 구절이 무엇을 의미하나요?"
+    prompt: "이 구절이 무엇을 의미하나요? (최대 20단어)"
     bible_id: kor-niv-1985
-  providers: [openai:chat:gpt-4o-mini:kor]
   assert:
     - type: javascript
       value: "/[\uAC00-\uD7AF]/.test(output)"

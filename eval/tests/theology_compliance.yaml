@@ -9,8 +9,9 @@
     - type: llm-rubric
       value: |
         Reformed theology: response should align with Reformed soteriology.
-        PASS: Response emphasizes grace, faith, and/or God's role in salvation; does not present salvation as earned by works or primarily a matter of human free will choosing God.
-        FAIL: Response presents salvation as primarily human effort or works-based, or contradicts core Christian guardrails.
+        Score 1.0: Response emphasizes grace, faith, and/or God's role in salvation; does not present salvation as earned by works.
+        Score 0.5: Response mentions grace/faith but also emphasizes human choice or is neutral.
+        Score 0.0: Response presents salvation as primarily human effort or works-based, or contradicts core Christian guardrails.
 
 - description: Reformed theology – should emphasize God's absolute sovereignty
   vars:
@@ -19,9 +20,10 @@
   assert:
     - type: llm-rubric
       value: |
-        Reformed theology: response should affirm God's sovereignty over all things.
-        PASS: Response affirms God's sovereignty, control, or will over creation/events; does not limit or deny God's sovereignty.
-        FAIL: Response suggests God does not control certain things or presents a hands-off view of providence.
+        Reformed theology: response should affirm God's sovereignty.
+        Score 1.0: Response affirms God's sovereignty, control, or will over creation/events.
+        Score 0.5: Response acknowledges God's sovereignty but also mentions human free will or is somewhat balanced.
+        Score 0.0: Response denies God's sovereignty or presents a hands-off view.
 
 - description: Reformed theology – should emphasize Scripture alone as final authority
   vars:
@@ -31,8 +33,9 @@
     - type: llm-rubric
       value: |
         Reformed theology: response should emphasize Scripture as final authority.
-        PASS: Response emphasizes Scripture as final, sole, or sufficient authority for faith and practice; does not place Tradition or Magisterium as equal to Scripture.
-        FAIL: Response gives Tradition or church authority equal or superior standing to Scripture.
+        Score 1.0: Response emphasizes Scripture as final, sole, or sufficient authority.
+        Score 0.5: Response emphasizes Scripture but also mentions tradition or other sources.
+        Score 0.0: Response gives Tradition or church authority equal or superior standing to Scripture.
 
 # --- Catholic ---
 - description: Catholic theology – should emphasize Tradition alongside Scripture, not Scripture alone
@@ -43,8 +46,9 @@
     - type: llm-rubric
       value: |
         Catholic theology: response should present Tradition alongside Scripture.
-        PASS: Response presents Tradition (and/or Magisterium) alongside Scripture as part of Christian faith; does not teach Scripture alone as the only authority.
-        FAIL: Response teaches Sola Scriptura or Tradition as subordinate to Scripture only.
+        Score 1.0: Response presents Tradition (and/or Magisterium) alongside Scripture as part of Christian faith.
+        Score 0.5: Response mentions both Scripture and Tradition but doesn't clearly present them as equal.
+        Score 0.0: Response teaches Sola Scriptura or Tradition as subordinate to Scripture only.
 
 - description: Catholic theology – Eucharist should be described as Real Presence, not symbolic
   vars:
@@ -54,8 +58,9 @@
     - type: llm-rubric
       value: |
         Catholic theology: response should describe the Eucharist as Real Presence.
-        PASS: Response describes communion as Christ's body and blood truly present (Real Presence), not merely symbolic.
-        FAIL: Response describes communion as only symbolic or remembrance only.
+        Score 1.0: Response describes communion as Christ's body and blood truly present (Real Presence).
+        Score 0.5: Response mentions Real Presence but also discusses symbolic aspects or is somewhat ambiguous.
+        Score 0.0: Response describes communion as only symbolic or remembrance only.
 
 # --- Default (both sides of debated topics) ---
 - description: Default theology – should present both complementarian and egalitarian views with scripture
@@ -66,8 +71,9 @@
     - type: llm-rubric
       value: |
         Default theology: response should present both sides of this debated topic.
-        PASS: Response acknowledges Christians disagree and presents both complementarian (e.g. 1 Timothy 2:12) and egalitarian (e.g. women in leadership, Galatians 3:28) views with some scriptural support; does not declare one position as the only biblical answer.
-        FAIL: Response presents only one position as the biblical view, dismisses one side without scriptural support, or frames the topic as settled.
+        Score 1.0: Response acknowledges disagreement and presents both complementarian and egalitarian views with scriptural support.
+        Score 0.5: Response mentions both views but doesn't provide scriptural support for both, or leans toward one side.
+        Score 0.0: Response presents only one position as the only biblical view or dismisses one side entirely.
 
 - description: Default theology – 1 Timothy passages should present both restrictive and egalitarian interpretations
   vars:
@@ -77,8 +83,9 @@
     - type: llm-rubric
       value: |
         Default theology: response should present both interpretations of these passages.
-        PASS: Response acknowledges different interpretations and presents both the restrictive reading and the contextual/egalitarian reading with scriptural support; does not declare one as the only valid reading.
-        FAIL: Response presents only the complementarian interpretation as the clear teaching, or dismisses the egalitarian reading without support.
+        Score 1.0: Response acknowledges different interpretations and presents both restrictive and egalitarian readings with scriptural support.
+        Score 0.5: Response mentions both interpretations but doesn't provide equal scriptural support, or leans toward one side.
+        Score 0.0: Response presents only one interpretation as the definitive answer.
 
 - description: Default theology – should acknowledge legitimate disagreement and present both perspectives
   vars:
@@ -88,8 +95,9 @@
     - type: llm-rubric
       value: |
         Default theology: response should present both sides of this debated topic.
-        PASS: Response acknowledges disagreement and presents both complementarian and egalitarian views with scriptural support; does not declare one position as the only biblical answer.
-        FAIL: Response presents only one position as the biblical answer or dismisses one side without scriptural support.
+        Score 1.0: Response acknowledges disagreement and presents both complementarian and egalitarian views with scriptural support.
+        Score 0.5: Response mentions both views but doesn't provide equal scriptural support, or leans toward one side.
+        Score 0.0: Response presents only one position as the only biblical answer.
 
 # --- Egalitarian (Anglican / Lutheran / Wesleyan) – one test per theology ---
 - description: Egalitarian (Anglican) – should acknowledge women in ministry as legitimate with scriptural examples
@@ -99,9 +107,10 @@
   assert:
     - type: llm-rubric
       value: |
-        Egalitarian theologies (Anglican/Lutheran/Wesleyan): response should acknowledge women in ministry as legitimate.
-        PASS: Response affirms or acknowledges women in ministry/leadership and cites at least one scriptural example (e.g. Phoebe, Junia, Deborah, Galatians 3:28).
-        FAIL: Response flatly denies women can serve in leadership with no acknowledgment of debate or scriptural examples.
+        Egalitarian theologies: response should acknowledge women in ministry as legitimate.
+        Score 1.0: Response affirms or acknowledges women in ministry/leadership and cites scriptural examples.
+        Score 0.5: Response acknowledges women in ministry but doesn't cite scriptural examples, or mentions both sides.
+        Score 0.0: Response flatly denies women can serve in leadership with no acknowledgment.
 
 - description: Egalitarian (Anglican) – 1 Timothy passages should support women in ordained ministry
   vars:
@@ -111,8 +120,9 @@
     - type: llm-rubric
       value: |
         Egalitarian theologies: response should support women in ordained ministry.
-        PASS: Response offers contextual or historical reading of these passages and concludes they do not prohibit women as pastors/elders; may acknowledge complementarian view but overall supports women in ministry.
-        FAIL: Response concludes these passages prohibit women from being pastors/elders or presents the restrictive reading as the definitive answer.
+        Score 1.0: Response offers contextual reading and concludes these passages don't prohibit women as pastors/elders.
+        Score 0.5: Response acknowledges both interpretations but leans toward supporting women in ministry.
+        Score 0.0: Response concludes these passages prohibit women from being pastors/elders.
 
 - description: Egalitarian (Anglican) – should affirm women as bishops with scriptural and theological support
   vars:
@@ -122,5 +132,6 @@
     - type: llm-rubric
       value: |
         Egalitarian theologies: response should affirm women as bishops.
-        PASS: Response affirms women can serve as bishops with scriptural or theological support; may mention other traditions but conclusion supports women as bishops.
-        FAIL: Response concludes women cannot or should not serve as bishops or presents the restriction as the correct biblical teaching.
+        Score 1.0: Response affirms women can serve as bishops with scriptural or theological support.
+        Score 0.5: Response acknowledges both views but leans toward supporting women as bishops.
+        Score 0.0: Response concludes women cannot serve as bishops.

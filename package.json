@@ -10,9 +10,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "eval":"bunx promptfoo eval -j 50 --filter-providers prod --no-cache",
-    "eval:staging": "bunx promptfoo eval -j 50 --filter-providers staging --no-cache",
-    "eval:local": "bunx promptfoo eval -j 50 --filter-providers local --no-cache",
+    "eval": "bunx promptfoo eval -j 50 --no-cache",
+    "eval:staging": "bunx promptfoo eval -c promptfooconfig.staging.yaml -j 50 --no-cache",
+    "eval:local": "bunx promptfoo eval -c promptfooconfig.local.yaml -j 50 --no-cache",
+    "eval:smoke": "bunx promptfoo eval --tests eval/tests/smoke.yaml -j 50 --no-cache",
+    "eval:smoke:staging": "bunx promptfoo eval -c promptfooconfig.staging.yaml --tests eval/tests/smoke.yaml -j 50 --no-cache",
+    "eval:smoke:local": "bunx promptfoo eval -c promptfooconfig.local.yaml --tests eval/tests/smoke.yaml -j 50 --no-cache",
     "eval:view": "bunx promptfoo view",
     "eval:report": "bun scripts/report-evals.ts"
   },
@@ -25,7 +28,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "promptfoo": "^0.120.25",
+    "promptfoo": "^0.120.26",
     "typescript": "^5.0.0"
   }
 }

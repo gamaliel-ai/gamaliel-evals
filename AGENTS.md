@@ -8,7 +8,7 @@ When authoring or editing promptfoo test YAML, modifying the eval harness, or ad
 
 ## Project structure
 
-- **eval/** – promptfoo config, `configs/` (e.g. language suite), `tests/` (YAML suites), theologies, profiles.
+- **eval/** – promptfoo config, `tests/` (YAML suites), theologies, profiles.
 - **scripts/** – one-off scripts (e.g. providers matrix).
 - **docs/** – design and porting status.
 - **app/** – Next.js app (Phase 2 web UI).
@@ -40,17 +40,13 @@ bun install
 **Inspecting results:** Always output to JSON (`-o /tmp/results.json`), then run the report script:
 
 ```bash
-bunx promptfoo eval -j 50 --filter-providers staging --no-cache -o /tmp/results.json \
+bunx promptfoo eval -c promptfooconfig.staging.yaml -j 50 --no-cache -o /tmp/results.json \
   && bun scripts/report-evals.ts /tmp/results.json
 ```
 
 `scripts/report-evals.ts` prints a compact, LLM-readable report: summary stats, per-provider pass counts, and full details for each failure (prompt, vars, failed assertions, truncated response). Pass any results JSON file as the argument.
 
-Language suite only (different providers per bible_id):
-
-```bash
-bunx promptfoo eval -c eval/configs/chat-language.yaml -j 50
-```
+Language tests are included in the main config and work via template variables (`bible_id` from test vars).
 
 **Workers:** Always use a large number of workers (recommend 50+) for faster iteration; pass `-j 50` or higher to `promptfoo eval` or in npm scripts.
 
@@ -59,18 +55,94 @@ For local evals: backend on 8000, `127.0.0.1 api.localhost` in `/etc/hosts`, and
 ## Conventions
 
 - Use Bun only for scripts (no Node).
-- Main config: `promptfooconfig.yaml` (repo root; auto-discovered by promptfoo). Language suite: `eval/configs/chat-language.yaml` (different providers per `bible_id`).
+- Main config: `promptfooconfig.yaml` (repo root; auto-discovered by promptfoo). Separate configs: `promptfooconfig.staging.yaml` and `promptfooconfig.local.yaml` for internal use.
 - Test suites: YAML in `eval/tests/`. Register new suites in the relevant config.
 - When adding suites or changing providers, update `docs/port-status.md`.
 
 ## Adding or changing evals
 
 1. Add or edit YAML in `eval/tests/`.
-2. Same providers as main config → add test file to `promptfooconfig.yaml` under `tests`.
-3. Different providers (e.g. per bible_id) → add config in `eval/configs/` and run `bunx promptfoo eval -c eval/configs/<name>.yaml -j 50`.
-4. Update `docs/port-status.md`.
+2. Add test file to `promptfooconfig.yaml` under `tests` (tests are provider-agnostic and work with all configs).
+3. Update `docs/port-status.md`.
 
 For assertion syntax and provider config, use https://www.promptfoo.dev/llms.txt.
+
+## When to use `--tests` vs `--filter-providers`
+
+### Use default config (production)
+
+**When:** Running the full test suite against production (default config).
+
+**Examples:**
+```bash
+# Run all tests from main config (production)
+bunx promptfoo eval -j 50
+
+# Run all tests against staging (internal)
+bunx promptfoo eval -c promptfooconfig.staging.yaml -j 50
+
+# Run all tests against local (internal)
+bunx promptfoo eval -c promptfooconfig.local.yaml -j 50
+```
+
+**Why:** Each config file defines its provider and test files. Tests are provider-agnostic and use template variables (theology, profile, bible_id) from test vars.
+
+### Use `--tests` (with optional `--filter-providers`)
+
+**When:** You want to run specific test files that are:
+- Not in the main config (like smoke tests)
+- A subset of tests from the config
+- Need different providers than what's in the main config
+
+**Examples:**
+```bash
+# Run smoke tests only (not in main config)
+bunx promptfoo eval --tests eval/tests/smoke.yaml
+
+# Run smoke tests against staging
+bunx promptfoo eval -c promptfooconfig.staging.yaml --tests eval/tests/smoke.yaml
+
+# Run a single test file from the suite
+bunx promptfoo eval --tests eval/tests/passage_citation.yaml
+```
+
+**Why:** Smoke tests aren't in the main config (they're quick validation tests run separately). The `--tests` flag overrides the config's test list.
+
+### Use `-c` (different config file)
+
+**When:** You want to run tests against a different environment (staging or local).
+
+**Examples:**
+```bash
+# Run against staging (internal use only)
+bunx promptfoo eval -c promptfooconfig.staging.yaml -j 50
+
+# Run against local (internal use only)
+bunx promptfoo eval -c promptfooconfig.local.yaml -j 50
+```
+
+**Why:** Separate config files (`promptfooconfig.staging.yaml` and `promptfooconfig.local.yaml`) are used for internal testing against staging and local environments. All tests are provider-agnostic and work with any config.
+
+### Decision Tree
+
+```
+Which environment?
+├─ Production → Use default config (bun run eval)
+│
+├─ Staging → Use -c promptfooconfig.staging.yaml (bun run eval:staging)
+│
+└─ Local → Use -c promptfooconfig.local.yaml (bun run eval:local)
+
+Want to run specific tests?
+→ Add --tests flag: bunx promptfoo eval --tests eval/tests/smoke.yaml
+```
+
+**Current setup:**
+- **Main config:** `promptfooconfig.yaml` (production) - auto-discovered, use `bun run eval`
+- **Staging config:** `promptfooconfig.staging.yaml` (internal) - use `bun run eval:staging` or `-c promptfooconfig.staging.yaml`
+- **Local config:** `promptfooconfig.local.yaml` (internal) - use `bun run eval:local` or `-c promptfooconfig.local.yaml`
+- **Test files:** `passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `language_compliance.yaml`, `smoke.yaml`
+- **All tests are provider-agnostic** - no hardcoded providers, work with any config via template variables (theology, profile, bible_id from test vars)
 
 ## Scope vs main repo
 
