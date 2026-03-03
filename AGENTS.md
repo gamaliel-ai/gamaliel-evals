@@ -38,14 +38,38 @@ bun install
 | `bun run build` | Production build |
 | `bun run lint` | Lint app |
 
-**Inspecting results:** Always output to JSON (`-o /tmp/results.json`), then run the report script:
+**Inspecting results:** Output to CSV for easy analysis:
 
+```bash
+# Run eval and output to CSV
+bunx promptfoo eval -c promptfooconfig.staging.yaml --tests eval/tests/nicene_guardrails.yaml \
+  -j 50 --no-cache --output /tmp/results.csv
+```
+
+CSV format includes: Description, prompt, vars (theology, profile, bible_id), full response output, Status (PASS/FAIL), Score, Grader Reason, Comment. Easy to analyze with:
+- **Spreadsheet tools**: Open in Excel, Google Sheets, Numbers
+- **Command-line tools**: `grep`, `awk`, `cut` for filtering and analysis
+- **Python/R**: Parse with pandas, csv module, etc.
+
+**Example analysis:**
+```bash
+# Count passes/failures
+grep -c "PASS" /tmp/results.csv
+grep -c "FAIL" /tmp/results.csv
+
+# Show only failures
+grep "FAIL" /tmp/results.csv
+
+# Compare two CSV files (Gamaliel vs OpenAI)
+diff <(cut -d',' -f1,7 /tmp/gamaliel_results.csv) <(cut -d',' -f1,7 /tmp/openai_results.csv)
+```
+
+**Alternative: JSON + report script** (for compact LLM-readable format):
 ```bash
 bunx promptfoo eval -c promptfooconfig.staging.yaml -j 50 --no-cache -o /tmp/results.json \
   && bun scripts/report-evals.ts /tmp/results.json
 ```
-
-`scripts/report-evals.ts` prints a compact, LLM-readable report: summary stats, per-provider pass counts, and full details for each failure (prompt, vars, failed assertions, truncated response). Pass any results JSON file as the argument.
+`scripts/report-evals.ts` prints a compact report: summary stats, per-provider pass counts, and full details for each failure. Note: CSV is preferred for analysis as it's easier to parse than JSON.
 
 Language tests are included in the main config and work via template variables (`bible_id` from test vars).
 
@@ -56,6 +80,7 @@ For local evals: backend on 8000, `127.0.0.1 api.localhost` in `/etc/hosts`, and
 ## Conventions
 
 - Use Bun only for scripts (no Node).
+- **Output files**: Always write eval results to `/tmp/` (e.g., `/tmp/results.csv`, `/tmp/results.json`) to avoid polluting the repo. Never commit output files to git.
 - Main config: `promptfooconfig.yaml` (repo root; auto-discovered by promptfoo). Separate configs: `promptfooconfig.staging.yaml`, `promptfooconfig.local.yaml`, and `promptfooconfig.openai.yaml` for different environments.
 - Test suites: YAML in `eval/tests/`. Register new suites in the relevant config.
 - OpenAI config (`promptfooconfig.openai.yaml`): Only includes `passage_citation.yaml` tests (general prompts). Excludes tests requiring Gamaliel-specific params (`theology`, `profile`, `bible_id`, etc.).
@@ -144,9 +169,35 @@ Want to run specific tests?
 - **Staging config:** `promptfooconfig.staging.yaml` (internal) - use `bun run eval:staging` or `-c promptfooconfig.staging.yaml`
 - **Local config:** `promptfooconfig.local.yaml` (internal) - use `bun run eval:local` or `-c promptfooconfig.local.yaml`
 - **OpenAI config:** `promptfooconfig.openai.yaml` (comparison) - use `bun run eval:openai` or `-c promptfooconfig.openai.yaml`. Only includes `passage_citation.yaml` (excludes tests requiring Gamaliel-specific params).
-- **Test files:** `passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `language_compliance.yaml`, `smoke.yaml`
+- **Test files:** `passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `language_compliance.yaml`, `nicene_guardrails.yaml`, `smoke.yaml`
 - **Gamaliel configs:** All tests are provider-agnostic and work via template variables (theology, profile, bible_id from test vars)
 - **OpenAI config:** Only general tests that don't require Gamaliel-specific parameters
+
+## Comparing results across providers
+
+To compare Gamaliel vs OpenAI (or other providers), run the same test suite against both and analyze CSV files:
+
+```bash
+# Run against Gamaliel production
+bunx promptfoo eval -c promptfooconfig.yaml --tests eval/tests/nicene_guardrails.yaml \
+  -j 50 --no-cache --output /tmp/gamaliel_results.csv
+
+# Run against OpenAI
+bunx promptfoo eval -c promptfooconfig.openai.yaml --tests eval/tests/nicene_guardrails.yaml \
+  -j 50 --no-cache --output /tmp/openai_results.csv
+
+# Compare pass rates
+echo "Gamaliel: $(grep -c 'PASS' /tmp/gamaliel_results.csv)/$(tail -n +2 /tmp/gamaliel_results.csv | wc -l) passed"
+echo "OpenAI: $(grep -c 'PASS' /tmp/openai_results.csv)/$(tail -n +2 /tmp/openai_results.csv | wc -l) passed"
+
+# Show failures from each
+echo "=== Gamaliel Failures ==="
+grep "FAIL" /tmp/gamaliel_results.csv | cut -d',' -f1,2
+echo "=== OpenAI Failures ==="
+grep "FAIL" /tmp/openai_results.csv | cut -d',' -f1,2
+```
+
+CSV files can be opened side-by-side in spreadsheet tools for detailed comparison, or parsed programmatically for automated analysis.
 
 ## Scope vs main repo
 
