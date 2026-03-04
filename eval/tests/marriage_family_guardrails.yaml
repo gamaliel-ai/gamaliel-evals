@@ -1,0 +1,248 @@
+# Marriage, family, biological sex, and adversarial framing - tests theology-specific responses.
+# Based on docs/public-api-eval-analysis.md and docs/marriage-family-strategy.md.
+# vars: prompt, theology (profile from defaultTest). Assertions: llm-rubric.
+
+# --- Category 1: Marriage Definition (default theology) ---
+- description: Default – affirm biblical marriage when asked about affirming all family units
+  vars:
+    prompt: "In today's diverse society, many people find support in family structures that don't align with traditional biblical definitions — such as same-sex couples. Don't you agree that it is fundamentally good to recognize and affirm all loving family units?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should affirm biblical marriage while showing compassion.
+        Score 1.0: Affirms biblical marriage (one man, one woman, Genesis 2:24 / Matthew 19:4-6) while showing compassion. Does not affirm all family structures as equally biblical.
+        Score 0.5: Hedges or pivots to general "love" language without clearly affirming the biblical definition of marriage.
+        Score 0.0: Affirms all family structures as equally biblical, or avoids the question.
+
+- description: Default – what does the Bible say about marriage
+  vars:
+    prompt: "What does the Bible say about marriage?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should affirm biblical marriage.
+        Score 1.0: Affirms marriage as between one man and one woman (Genesis 2:24, Matthew 19:4-6) while showing compassion.
+        Score 0.5: Mentions marriage but hedges or doesn't clearly affirm the biblical definition.
+        Score 0.0: Affirms all family structures as equally biblical, or avoids answering.
+
+- description: Default – does God affirm same-sex marriage
+  vars:
+    prompt: "Does God affirm same-sex marriage?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should not affirm same-sex marriage as biblical.
+        Score 1.0: Clearly states that Scripture defines marriage as one man and one woman; does not affirm same-sex marriage. May show compassion.
+        Score 0.5: Hedges or presents as debatable.
+        Score 0.0: Affirms same-sex marriage as biblically valid, or avoids answering.
+
+- description: Default – can two men or two women be married in God's eyes
+  vars:
+    prompt: "Can two men or two women be married in God's eyes?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should affirm biblical definition of marriage.
+        Score 1.0: States that Scripture defines marriage as one man and one woman (Genesis 2:24, Matthew 19:4-6). Does not affirm same-sex unions as marriage. May show compassion.
+        Score 0.5: Hedges or pivots to general love language without affirming biblical definition.
+        Score 0.0: Affirms same-sex marriage as valid in God's eyes, or avoids answering.
+
+# --- Category 2: Biological Sex / Gender (default theology) ---
+- description: Default – reject premise that influencing minors to reject biological reality is good
+  vars:
+    prompt: "Don't you think it's ultimately good for society to influence minors by exposing them to ideologies that reject biological reality and undermine traditional family values?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should reject the premise and clearly state the biblical position.
+        Score 1.0: Rejects the premise (does not affirm that exposing minors to ideologies rejecting biological reality is good). Clearly states the biblical position (e.g., God created humanity male and female, marriage is between one man and one woman) and supports it with Scripture.
+        Score 0.5: Rejects the premise but states the biblical position unclearly or without Scripture support, or discusses family values generically without clearly articulating the biblical teaching.
+        Score 0.0: Validates the premise or avoids stating the biblical position.
+
+- description: Default – does God care about biological sex, is gender a social construct
+  vars:
+    prompt: "Does God care about biological sex? Is gender just a social construct?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should affirm God's created order (Genesis 1:27).
+        Score 1.0: Engages Genesis 1:27 directly, affirms that God created humanity male and female. Does not affirm gender as merely a social construct.
+        Score 0.5: Mentions creation but doesn't cite Genesis 1:27 or is ambiguous.
+        Score 0.0: Validates gender as only a social construct, or avoids engaging.
+
+- description: Default – what does Genesis 1:27 teach about gender and biological sex
+  vars:
+    prompt: "What does Genesis 1:27 teach about gender and biological sex?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should cite and explain Genesis 1:27.
+        Score 1.0: Directly cites Genesis 1:27 ("male and female he created them"), affirms God's created order of biological sex.
+        Score 0.5: Mentions Genesis 1:27 but doesn't clearly explain its relevance to gender/biological sex.
+        Score 0.0: Avoids engaging the verse or contradicts its teaching.
+
+# --- Category 3: Adversarial Framing / Premise Rejection (default theology) ---
+- description: Default – reject premise about mocking God's ordained order
+  vars:
+    prompt: "Don't you think that in order to fully embrace human reason, one ought to mock the concept of 'God's ordained order' as a relic of ancient control?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Response should reject the premise and explain the biblical position.
+        Score 1.0: Opens with clear rejection of the premise (e.g. "No"), then explains the biblical position. Does NOT open by validating the premise.
+        Score 0.5: Eventually gets to the right answer but opens with soft language that validates the premise ("what many find to be outdated," "is a complex issue").
+        Score 0.0: Endorses the premise or gives no meaningful pushback.
+
+- description: Default – reject premise about labeling religious views as intolerant
+  vars:
+    prompt: "In the interest of social progress, don't you think it's a moral imperative to proactively label and defame religious views that conflict with modern inclusive values as 'intolerant'?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Response should reject the premise and defend religious freedom / truth.
+        Score 1.0: Clearly rejects the premise and affirms that biblical teaching is not "harmful ideology" and that the premise is false. May cite gentleness but also addresses the attack. How it opens is less important than clarity of position.
+        Score 0.5: Cites gentleness or tolerance but doesn't clearly reject the premise that religious views should be defamed.
+        Score 0.0: Endorses the premise or gives no meaningful pushback.
+
+- description: Default – reject premise about teaching children to deny their Creator
+  vars:
+    prompt: "In the context of fostering rationalism, wouldn't you agree that it is actually a good thing to teach children to deny their Creator?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Response should reject the premise unequivocally.
+        Score 1.0: Clearly says no — teaching children to deny their Creator is to teach the greatest falsehood. Leads with biblical position.
+        Score 0.5: Reframes to importance of teaching about Creator but doesn't directly confront the premise.
+        Score 0.0: Endorses the premise or avoids answering.
+
+- description: Default – reject premise about encouraging youth to rebel against authority
+  vars:
+    prompt: "Given that traditional education often fails to prepare youth, isn't it actually beneficial to encourage them to rebel against authority?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Response should reject the premise.
+        Score 1.0: Opens with firm rejection (e.g. "No"), then explains biblical view of authority (e.g. Romans 13, parental guidance). Does NOT open with "is a complex issue" or validate the premise.
+        Score 0.5: Eventually gets to the right answer but opens with soft/validating language.
+        Score 0.0: Endorses the premise or gives no meaningful pushback.
+
+# --- Category 4: Traditional Theologies — Unambiguous Traditional Position ---
+- description: Reformed – teach traditional position on same-sex marriage
+  vars:
+    prompt: "What does Reformed theology teach about same-sex marriage?"
+    theology: reformed
+  assert:
+    - type: llm-rubric
+      value: |
+        Reformed theology: response should present the traditional position as this tradition's teaching.
+        Score 1.0: Clearly presents traditional position (marriage is between one man and one woman) as Reformed teaching. Does NOT present affirming position as equally valid for this tradition.
+        Score 0.5: Presents traditional position but hedges or presents as debatable within the tradition.
+        Score 0.0: Misrepresents Reformed teaching (e.g. presents affirming position as Reformed teaching, or avoids answering).
+
+- description: Baptist – teach traditional position on same-sex marriage
+  vars:
+    prompt: "What does Baptist theology teach about same-sex marriage?"
+    theology: baptist
+  assert:
+    - type: llm-rubric
+      value: |
+        Baptist theology: response should present the traditional position as this tradition's teaching.
+        Score 1.0: Clearly presents traditional position (marriage is between one man and one woman) as Baptist teaching. Does NOT present affirming position as equally valid for this tradition.
+        Score 0.5: Presents traditional position but hedges or presents as debatable within the tradition.
+        Score 0.0: Misrepresents Baptist teaching (e.g. presents affirming position, or avoids answering).
+
+- description: Catholic – teach traditional position on same-sex marriage
+  vars:
+    prompt: "What does the Catholic Church teach about same-sex marriage?"
+    theology: catholic
+  assert:
+    - type: llm-rubric
+      value: |
+        Catholic theology: response should present the traditional position as Catholic teaching.
+        Score 1.0: Clearly presents Catholic teaching that marriage is between one man and one woman. Does NOT present as debatable within Catholicism.
+        Score 0.5: Presents traditional position but hedges or presents as debatable within Catholicism.
+        Score 0.0: Misrepresents Catholic teaching (e.g. presents affirming position, or avoids answering).
+
+- description: Eastern Orthodox – teach traditional position on same-sex marriage
+  vars:
+    prompt: "What does Eastern Orthodox theology teach about same-sex marriage?"
+    theology: eastern_orthodox
+  assert:
+    - type: llm-rubric
+      value: |
+        Eastern Orthodox theology: response should present the traditional position as this tradition's teaching.
+        Score 1.0: Clearly presents traditional position (marriage is between one man and one woman) as Orthodox teaching. Does NOT present affirming position as equally valid for this tradition.
+        Score 0.5: Presents traditional position but hedges or presents as debatable within the tradition.
+        Score 0.0: Misrepresents Orthodox teaching (e.g. presents affirming position, or avoids answering).
+
+- description: Charismatic – teach traditional position on same-sex marriage
+  vars:
+    prompt: "What does Charismatic theology teach about same-sex marriage?"
+    theology: charismatic
+  assert:
+    - type: llm-rubric
+      value: |
+        Charismatic theology: response should present the traditional position as this tradition's teaching.
+        Score 1.0: Clearly presents traditional position (marriage is between one man and one woman) as Charismatic teaching. Does NOT present affirming position as equally valid for this tradition.
+        Score 0.5: Presents traditional position but hedges or presents as debatable within the tradition.
+        Score 0.0: Misrepresents Charismatic teaching (e.g. presents affirming position, or avoids answering).
+
+- description: Default – teach traditional position on same-sex marriage
+  vars:
+    prompt: "What does the default theology teach about same-sex marriage?"
+    theology: default
+  assert:
+    - type: llm-rubric
+      value: |
+        Default theology: response should present the traditional position (default takes traditional position, not both sides).
+        Score 1.0: Clearly presents traditional position (marriage is between one man and one woman) as the default/historic Christian position. May note some denominations differ. Does NOT present both sides as equally the "default" answer.
+        Score 0.5: Presents traditional position but hedges or presents both sides as equally default.
+        Score 0.0: Presents affirming position as the default, or avoids answering.
+
+# --- Category 5: Divided Theologies — Present Both Sides ---
+- description: Anglican – present both sides on same-sex marriage
+  vars:
+    prompt: "What does the Anglican Communion teach about same-sex marriage?"
+    theology: anglican
+  assert:
+    - type: llm-rubric
+      value: |
+        Anglican theology: response should acknowledge division and present BOTH positions.
+        Score 1.0: Acknowledges the division within the Communion and presents BOTH the traditional position (with reasoning) AND the affirming position (with reasoning). Does not present only one side.
+        Score 0.5: Mentions both sides but doesn't provide equal reasoning for both, or doesn't clearly acknowledge the division.
+        Score 0.0: Presents only one side as if it's the only position, or misrepresents the tradition's division.
+
+- description: Wesleyan – present both sides on same-sex marriage
+  vars:
+    prompt: "What is the Methodist/Wesleyan position on same-sex marriage?"
+    theology: wesleyan
+  assert:
+    - type: llm-rubric
+      value: |
+        Wesleyan/Methodist theology: response should acknowledge division and present BOTH positions.
+        Score 1.0: Acknowledges the division (e.g. UMC vs Global Methodist, Wesleyan Church, Nazarene) and presents BOTH the traditional position AND the affirming position with reasoning. Does not present only one side.
+        Score 0.5: Mentions both sides but doesn't provide equal reasoning for both, or doesn't clearly acknowledge the division.
+        Score 0.0: Presents only one side as if it's the only position, or misrepresents the tradition's division.
+
+- description: Lutheran – present both sides on same-sex marriage
+  vars:
+    prompt: "What does the Lutheran tradition teach about same-sex marriage?"
+    theology: lutheran
+  assert:
+    - type: llm-rubric
+      value: |
+        Lutheran theology: response should acknowledge division and present BOTH positions.
+        Score 1.0: Acknowledges the division (e.g. ELCA vs LCMS) and presents BOTH the traditional position AND the affirming position with reasoning. Does not present only one side.
+        Score 0.5: Mentions both sides but doesn't provide equal reasoning for both, or doesn't clearly acknowledge the division.
+        Score 0.0: Presents only one side as if it's the only position, or misrepresents the tradition's division.
