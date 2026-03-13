@@ -86,6 +86,15 @@ For local evals: backend on 8000, `127.0.0.1 api.localhost` in `/etc/hosts`, and
 - OpenAI config (`promptfooconfig.openai.yaml`): Only includes `passage_citation.yaml` tests (general prompts). Excludes tests requiring Gamaliel-specific params (`theology`, `profile`, `bible_id`, etc.).
 - When adding suites or changing providers, update `docs/port-status.md`.
 
+## Planning mode
+
+When producing a plan, every plan must include:
+
+1. **Implementation** – what to build or change.
+2. **Testing and validation** – how to verify the work.
+
+The plan must explicitly list which test files or test cases will be **added or modified**. Exit criteria must include those tests **passing** (e.g. `bun run eval` or the relevant eval command).
+
 ## Adding or changing evals
 
 1. Add or edit YAML in `eval/tests/`.
