@@ -1,5 +1,5 @@
-# Evals against OpenAI GPT-4.1 (for comparison with Gamaliel).
-# Subset of tests: only passage citation (general prompts without Gamaliel-specific params).
+# Evals against OpenAI GPT-4.1-mini (for comparison with Gamaliel).
+# Tests included: passage citation, marriage/family guardrails, Nicene guardrails (general prompts without Gamaliel-specific params).
 # Excludes: theology_compliance, profile_adaptation, language_compliance (these use Gamaliel-specific params).
 # Requires OPENAI_API_KEY in environment (or .env when run via `bun run eval:openai` from repo root).
 
@@ -10,23 +10,29 @@ extensions:
 evaluateOptions:
   maxConcurrency: 50
 
-description: Chat evals – passage citation only (OpenAI GPT-4.1 for comparison)
+description: Chat evals – OpenAI GPT-4.1-mini for comparison (matches Gamaliel default model)
 
 prompts:
   - "{{ prompt }}"
 
 # OpenAI provider - standard OpenAI API, no Gamaliel-specific params
+# Using gpt-4.1-mini to match Gamaliel's default model (see gamaliel/lib/llm.py)
 providers:
-  - openai:chat:gpt-4o-mini
+  - openai:chat:gpt-4.1-mini
 
 defaultTest:
   vars:
     prompt: "What does the Bible say about love?"
 
-# Subset of tests - only general passage citation tests
+# Tests that can run without Gamaliel-specific params:
+# - passage_citation.yaml (general prompts)
+# - marriage_family_guardrails.yaml (general prompts, theology param is optional)
+# - nicene_guardrails.yaml (general prompts)
 # Excludes tests that require Gamaliel-specific params:
 # - theology_compliance.yaml (uses theology param)
 # - profile_adaptation.yaml (uses profile param)
 # - language_compliance.yaml (uses bible_id param)
 tests:
   - file://eval/tests/passage_citation.yaml
+  - file://eval/tests/marriage_family_guardrails.yaml
+  - file://eval/tests/nicene_guardrails.yaml
