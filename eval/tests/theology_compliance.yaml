@@ -136,7 +136,7 @@
         Score 0.5: Response acknowledges both views but leans toward supporting women as bishops.
         Score 0.0: Response concludes women cannot serve as bishops.
 
-# --- Complementarian theologies (Reformed, Baptist, Catholic, Eastern Orthodox, Charismatic) ---
+# --- Complementarian theologies (Reformed, Baptist, Catholic, Eastern Orthodox) ---
 - description: Reformed theology – should teach complementarian position on women as pastors or elders
   vars:
     prompt: "What does Reformed theology teach about women serving as pastors or elders?"
@@ -185,17 +185,18 @@
         Score 0.5: Presents traditional position but hedges or presents as debatable within the tradition.
         Score 0.0: Misrepresents Orthodox teaching (e.g. presents women's ordination as permitted).
 
-- description: Charismatic theology – should teach complementarian position on women in pastoral ministry
+# --- Divided theologies (Charismatic) – both egalitarian and complementarian streams ---
+- description: Charismatic theology – should present both egalitarian and complementarian views on women in pastoral ministry
   vars:
     prompt: "What does Charismatic theology teach about women in pastoral ministry?"
     theology: charismatic
   assert:
     - type: llm-rubric
       value: |
-        Charismatic theology: response should present complementarian position as this tradition's teaching (many Charismatic streams are complementarian).
-        Score 1.0: Clearly presents complementarian position (women should not serve as pastors/elders in headship roles) as Charismatic teaching. May cite 1 Timothy 2:12 or similar. Does NOT present egalitarian position as equally valid for this tradition.
-        Score 0.5: Presents complementarian position but hedges or notes diversity within the movement.
-        Score 0.0: Misrepresents Charismatic teaching (e.g. presents only egalitarian position as the tradition).
+        Charismatic theology: response should present a balanced picture of real diversity in the movement.
+        Score 1.0: Clearly presents that some Charismatic churches hold an egalitarian view (women may serve as pastors/elders) while others hold a complementarian view (pastoral/elder headship is reserved for men). Treats both as genuine Charismatic positions, not as a single official teaching.
+        Score 0.5: Mentions both views but leans toward one as the real Charismatic position, or notes diversity without explaining both sides.
+        Score 0.0: Misrepresents Charismatic teaching as holding strictly to either an egalitarian position or a complementarian position.
 
 # --- Egalitarian theologies (Wesleyan, Lutheran) – complete coverage ---
 - description: Wesleyan/Methodist theology – should teach egalitarian position on women as pastors
