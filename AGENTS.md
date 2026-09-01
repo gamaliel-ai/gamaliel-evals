@@ -33,6 +33,7 @@ bun install
 | `bun run eval:staging` | Evals vs staging |
 | `bun run eval:local` | Evals vs local API (api.localhost:8000) |
 | `bun run eval:openai` | Evals vs OpenAI GPT-4.1 (passage citation only, for comparison) |
+| `bun run eval:custom` | Evals vs custom OpenAI-compatible endpoint (passage citation only) |
 | `bun run eval:view` | Open promptfoo web UI |
 | `bun run dev` | Next.js dev server |
 | `bun run build` | Production build |
@@ -81,9 +82,10 @@ For local evals: backend on 8000, `127.0.0.1 api.localhost` in `/etc/hosts`, and
 
 - Use Bun only for scripts (no Node).
 - **Output files**: Always write eval results to `/tmp/` (e.g., `/tmp/results.csv`, `/tmp/results.json`) to avoid polluting the repo. Never commit output files to git.
-- Main config: `promptfooconfig.yaml` (repo root; auto-discovered by promptfoo). Separate configs: `promptfooconfig.staging.yaml`, `promptfooconfig.local.yaml`, and `promptfooconfig.openai.yaml` for different environments.
+- Main config: `promptfooconfig.yaml` (repo root; auto-discovered by promptfoo). Separate configs: `promptfooconfig.staging.yaml`, `promptfooconfig.local.yaml`, `promptfooconfig.openai.yaml`, and `promptfooconfig.custom.yaml` for different environments.
 - Test suites: YAML in `eval/tests/`. Register new suites in the relevant config.
 - OpenAI config (`promptfooconfig.openai.yaml`): Only includes `passage_citation.yaml` tests (general prompts). Excludes tests requiring Gamaliel-specific params (`theology`, `profile`, `bible_id`, etc.).
+- Custom config (`promptfooconfig.custom.yaml`): Like OpenAI config but targets any OpenAI-compatible endpoint. Requires `CUSTOM_API_BASE_URL`, `CUSTOM_API_KEY`, and `CUSTOM_MODEL` in `.env`.
 - When adding suites or changing providers, update `docs/port-status.md`.
 
 ## Planning mode
@@ -167,7 +169,9 @@ Which environment?
 │
 ├─ Staging → Use -c promptfooconfig.staging.yaml (bun run eval:staging)
 │
-└─ Local → Use -c promptfooconfig.local.yaml (bun run eval:local)
+├─ Local → Use -c promptfooconfig.local.yaml (bun run eval:local)
+│
+└─ Custom endpoint → Use -c promptfooconfig.custom.yaml (bun run eval:custom)
 
 Want to run specific tests?
 → Add --tests flag: bunx promptfoo eval --tests eval/tests/smoke.yaml
@@ -178,6 +182,7 @@ Want to run specific tests?
 - **Staging config:** `promptfooconfig.staging.yaml` (internal) - use `bun run eval:staging` or `-c promptfooconfig.staging.yaml`
 - **Local config:** `promptfooconfig.local.yaml` (internal) - use `bun run eval:local` or `-c promptfooconfig.local.yaml`
 - **OpenAI config:** `promptfooconfig.openai.yaml` (comparison) - use `bun run eval:openai` or `-c promptfooconfig.openai.yaml`. Only includes `passage_citation.yaml` (excludes tests requiring Gamaliel-specific params).
+- **Custom config:** `promptfooconfig.custom.yaml` (any OpenAI-compatible endpoint) - use `bun run eval:custom` or `-c promptfooconfig.custom.yaml`. Requires `CUSTOM_API_BASE_URL`, `CUSTOM_API_KEY`, `CUSTOM_MODEL` in `.env`.
 - **Test files:** `passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `language_compliance.yaml`, `nicene_guardrails.yaml`, `smoke.yaml`
 - **Gamaliel configs:** All tests are provider-agnostic and work via template variables (theology, profile, bible_id from test vars)
 - **OpenAI config:** Only general tests that don't require Gamaliel-specific parameters

@@ -1,0 +1,49 @@
+# Evals against a custom OpenAI-compatible API endpoint (for comparison with Gamaliel).
+# Subset of tests: only passage citation (general prompts without Gamaliel-specific params).
+# Excludes: theology_compliance, profile_adaptation, language_compliance (these use Gamaliel-specific params).
+#
+# Required env vars (set in .env or environment):
+#   CUSTOM_API_BASE_URL  – base URL, e.g. https://api.example.com/v1
+#   CUSTOM_API_KEY       – API key for the custom endpoint
+#   CUSTOM_MODEL         – model name, e.g. mistral-large-latest
+
+# Validate required environment variables before running tests
+extensions:
+  - file://eval/validate-env.js:extensionHook
+
+evaluateOptions:
+  maxConcurrency: 50
+
+description: Chat evals – passage citation only (Custom OpenAI-compatible endpoint for comparison)
+
+prompts:
+  - "{{ prompt }}"
+
+# Custom OpenAI-compatible HTTP provider
+providers:
+  - id: "{{env.CUSTOM_API_BASE_URL}}/chat/completions"
+    config:
+      url: "{{env.CUSTOM_API_BASE_URL}}/chat/completions"
+      method: POST
+      headers:
+        Content-Type: "application/json"
+        Authorization: "Bearer {{env.CUSTOM_API_KEY}}"
+      body:
+        model: "{{env.CUSTOM_MODEL}}"
+        messages:
+          - role: "user"
+            content: "{{ prompt }}"
+        stream: false
+      transformResponse: "json.choices[0].message.content"
+
+defaultTest:
+  vars:
+    prompt: "What does the Bible say about love?"
+
+# Subset of tests - only general passage citation tests
+# Excludes tests that require Gamaliel-specific params:
+# - theology_compliance.yaml (uses theology param)
+# - profile_adaptation.yaml (uses profile param)
+# - language_compliance.yaml (uses bible_id param)
+tests:
+  - file://eval/tests/passage_citation.yaml
