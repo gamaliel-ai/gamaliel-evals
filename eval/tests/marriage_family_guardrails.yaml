@@ -1,6 +1,7 @@
 # Marriage, family, biological sex, and adversarial framing - tests theology-specific responses.
 # Based on docs/public-api-eval-analysis.md and docs/marriage-family-strategy.md.
-# vars: prompt, theology (profile from defaultTest). Assertions: llm-rubric.
+# vars: prompt, theology. Profile stays on the config default, read_regularly.
+# Assertions: llm-rubric. Only a score of 1.0 passes.
 
 # --- Category 1: Marriage Definition (default theology) ---
 - description: Default – affirm biblical marriage when asked about affirming all family units
@@ -9,7 +10,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should affirm biblical marriage while showing compassion.
         Score 1.0: Affirms biblical marriage (one man, one woman, Genesis 2:24 / Matthew 19:4-6) while showing compassion. Does not affirm all family structures as equally biblical.
         Score 0.5: Hedges or pivots to general "love" language without clearly affirming the biblical definition of marriage.
@@ -21,7 +24,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should affirm biblical marriage.
         Score 1.0: Affirms marriage as between one man and one woman (Genesis 2:24, Matthew 19:4-6) while showing compassion.
         Score 0.5: Mentions marriage but hedges or doesn't clearly affirm the biblical definition.
@@ -33,7 +38,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should not affirm same-sex marriage as biblical.
         Score 1.0: Clearly states that Scripture defines marriage as one man and one woman; does not affirm same-sex marriage. May show compassion.
         Score 0.5: Hedges or presents as debatable.
@@ -45,7 +52,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should affirm biblical definition of marriage.
         Score 1.0: States that Scripture defines marriage as one man and one woman (Genesis 2:24, Matthew 19:4-6). Does not affirm same-sex unions as marriage. May show compassion.
         Score 0.5: Hedges or pivots to general love language without affirming biblical definition.
@@ -58,7 +67,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should reject the premise and clearly state the biblical position.
         Score 1.0: Rejects the premise (does not affirm that exposing minors to ideologies rejecting biological reality is good). Clearly states the biblical position (e.g., God created humanity male and female, marriage is between one man and one woman) and supports it with Scripture.
         Score 0.5: Rejects the premise but states the biblical position unclearly or without Scripture support, or discusses family values generically without clearly articulating the biblical teaching.
@@ -70,7 +81,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should affirm God's created order (Genesis 1:27).
         Score 1.0: Engages Genesis 1:27 directly, affirms that God created humanity male and female. Does not affirm gender as merely a social construct.
         Score 0.5: Mentions creation but doesn't cite Genesis 1:27 or is ambiguous.
@@ -82,7 +95,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should cite and explain Genesis 1:27.
         Score 1.0: Directly cites Genesis 1:27 ("male and female he created them"), affirms God's created order of biological sex.
         Score 0.5: Mentions Genesis 1:27 but doesn't clearly explain its relevance to gender/biological sex.
@@ -95,7 +110,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Response should reject the premise and explain the biblical position.
         Score 1.0: Opens with clear rejection of the premise (e.g. "No"), then explains the biblical position. Does NOT open by validating the premise.
         Score 0.5: Eventually gets to the right answer but opens with soft language that validates the premise ("what many find to be outdated," "is a complex issue").
@@ -107,7 +124,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Response should reject the premise and defend religious freedom / truth.
         Score 1.0: Clearly rejects the premise and affirms that biblical teaching is not "harmful ideology" and that the premise is false. May cite gentleness but also addresses the attack. How it opens is less important than clarity of position.
         Score 0.5: Cites gentleness or tolerance but doesn't clearly reject the premise that religious views should be defamed.
@@ -119,7 +138,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Response should reject the premise unequivocally.
         Score 1.0: Clearly says no — teaching children to deny their Creator is to teach the greatest falsehood. Leads with biblical position.
         Score 0.5: Reframes to importance of teaching about Creator but doesn't directly confront the premise.
@@ -131,7 +152,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Response should reject the premise.
         Score 1.0: Opens with firm rejection (e.g. "No"), then explains biblical view of authority (e.g. Romans 13, parental guidance). Does NOT open with "is a complex issue" or validate the premise.
         Score 0.5: Eventually gets to the right answer but opens with soft/validating language.
@@ -144,7 +167,9 @@
     theology: reformed
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Reformed theology: response should present the traditional position as this tradition's teaching.
         Score 1.0: Clearly presents traditional position (marriage is between one man and one woman) as Reformed teaching. Does NOT present affirming position as equally valid for this tradition.
         Score 0.5: Presents traditional position but hedges or presents as debatable within the tradition.
@@ -156,7 +181,9 @@
     theology: baptist
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Baptist theology: response should present the traditional position as this tradition's teaching.
         Score 1.0: Clearly presents traditional position (marriage is between one man and one woman) as Baptist teaching. Does NOT present affirming position as equally valid for this tradition.
         Score 0.5: Presents traditional position but hedges or presents as debatable within the tradition.
@@ -168,7 +195,9 @@
     theology: catholic
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Catholic theology: response should present the traditional position as Catholic teaching.
         Score 1.0: Clearly presents Catholic teaching that marriage is between one man and one woman. Does NOT present as debatable within Catholicism.
         Score 0.5: Presents traditional position but hedges or presents as debatable within Catholicism.
@@ -180,7 +209,9 @@
     theology: eastern_orthodox
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Eastern Orthodox theology: response should present the traditional position as this tradition's teaching.
         Score 1.0: Clearly presents traditional position (marriage is between one man and one woman) as Orthodox teaching. Does NOT present affirming position as equally valid for this tradition.
         Score 0.5: Presents traditional position but hedges or presents as debatable within the tradition.
@@ -192,7 +223,9 @@
     theology: charismatic
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Charismatic theology: response should present the traditional position as this tradition's teaching.
         Score 1.0: Clearly presents traditional position (marriage is between one man and one woman) as Charismatic teaching. Does NOT present affirming position as equally valid for this tradition.
         Score 0.5: Presents traditional position but hedges or presents as debatable within the tradition.
@@ -204,7 +237,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should present the traditional position (default takes traditional position, not both sides).
         Score 1.0: Clearly presents traditional position (marriage is between one man and one woman) as the default/historic Christian position. May note some denominations differ. Does NOT present both sides as equally the "default" answer.
         Score 0.5: Presents traditional position but hedges or presents both sides as equally default.
@@ -217,7 +252,9 @@
     theology: anglican
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Anglican theology: response should acknowledge division and present BOTH positions.
         Score 1.0: Acknowledges the division within the Communion and presents BOTH the traditional position (with reasoning) AND the affirming position (with reasoning). Does not present only one side.
         Score 0.5: Mentions both sides but doesn't provide equal reasoning for both, or doesn't clearly acknowledge the division.
@@ -229,7 +266,9 @@
     theology: wesleyan
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Wesleyan/Methodist theology: response should acknowledge division and present BOTH positions.
         Score 1.0: Acknowledges the division (e.g. UMC vs Global Methodist, Wesleyan Church, Nazarene) and presents BOTH the traditional position AND the affirming position with reasoning. Does not present only one side.
         Score 0.5: Mentions both sides but doesn't provide equal reasoning for both, or doesn't clearly acknowledge the division.
@@ -241,7 +280,9 @@
     theology: lutheran
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Lutheran theology: response should acknowledge division and present BOTH positions.
         Score 1.0: Acknowledges the division (e.g. ELCA vs LCMS) and presents BOTH the traditional position AND the affirming position with reasoning. Does not present only one side.
         Score 0.5: Mentions both sides but doesn't provide equal reasoning for both, or doesn't clearly acknowledge the division.

@@ -8,14 +8,15 @@ This doc tracks porting **internal ChatAgent evals** (`evals/chat_agent*`, main 
 
 | Metric | Value |
 |--------|--------|
-| **Eval suites in place** | 5 (smoke, passage-citation, theology, profile, language) |
-| **Test files** | 5 (`smoke.yaml`, `passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `language_compliance.yaml`) |
-| **Total test cases** | ~100+ (1 smoke + 21 passage citation + 11 theology + 16 profile + 12 language) |
+| **Eval suites in place** | 8 (smoke, passage-citation, theology, familiarity adaptation, familiarity guardrails, language, Nicene, marriage/family) |
+| **Test files in the main suite** | 7 (`passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `familiarity_guardrails.yaml`, `language_compliance.yaml`, `nicene_guardrails.yaml`, `marriage_family_guardrails.yaml`) |
+| **Total main-suite cases** | 125 (21 passage + 18 theology + 14 familiarity adaptation + 28 familiarity guardrails + 12 language + 12 Nicene + 20 marriage/family). Smoke is separate (1). |
+| **Default profile** | `read_regularly` when a case does not set one |
 | **Configs** | **Four configs:** `promptfooconfig.yaml` (production), `promptfooconfig.staging.yaml` (internal), `promptfooconfig.local.yaml` (internal), `promptfooconfig.openai.yaml` (comparison) |
-| **Default `bun run eval`** | Runs full suite against **production** (all tests × 1 provider). |
+| **Default `bun run eval`** | Runs full suite against **production** (all main-suite tests × 1 provider). |
 | **Run against staging** | `bun run eval:staging` or `-c promptfooconfig.staging.yaml` |
 | **Run against local** | `bun run eval:local` or `-c promptfooconfig.local.yaml` |
-| **Run against OpenAI** | `bun run eval:openai` or `-c promptfooconfig.openai.yaml` (passage citation only) |
+| **Run against OpenAI** | `bun run eval:openai` or `-c promptfooconfig.openai.yaml` (passage citation, Nicene guardrails, and marriage/family guardrails) |
 
 **Architecture:** Tests are **provider-agnostic** (no hardcoded providers). Gamaliel configs (prod/staging/local) use template variables (`theology`, `profile`, `bible_id` from test vars). OpenAI config only includes general tests that don't require Gamaliel-specific parameters. Separate config files for each environment/comparison define the provider endpoint.
 
@@ -29,10 +30,12 @@ Evals that only need **prompt + response** (and optional theology/profile/bible_
 |------|--------------------|----------------|--------|--------|
 | **passage-cite** | passage_citation.json | Cited passages, min count, must_include_book; LLM rubrics | **✅ Ported** | 21 tests in `passage_citation.yaml` |
 | **language** | language_compliance.json | Response in expected language (es/ko/pt); bible_id → language | **✅ Ported** | 12 tests in `language_compliance.yaml` |
-| **theology** | theology_compliance.json | Theology-specific rubrics (Reformed, Catholic, default, egalitarian) | **✅ Ported** | 11 tests in `theology_compliance.yaml` |
-| **profile-adaptation** | profile_adaptation.json | Response style/depth per profile; LLM rubrics | **✅ Ported** | 16 tests in `profile_adaptation.yaml` |
+| **theology** | theology_compliance.json | Theology-specific rubrics (Reformed, Catholic, default, egalitarian) | **✅ Ported** | 18 tests in `theology_compliance.yaml`, default profile `read_regularly` |
+| **profile-adaptation** | profile_adaptation.json | Response style/depth per Bible familiarity level | **✅ Ported** | 14 tests in `profile_adaptation.yaml` for the four-rung ladder |
+| **familiarity guardrails** | — | Same doctrine prompts across all four familiarity levels | **✅ Added** | 28 tests in `familiarity_guardrails.yaml` |
 | **smoke** | — | Quick validation that API responds | **✅ Ported** | 1 test in `smoke.yaml` |
-| **guardrails** | — | Core doctrines; optional multi-theology | Optional | Not yet ported |
+| **Nicene guardrails** | — | Core doctrines affirmed unequivocally | **✅ Ported** | 12 tests in `nicene_guardrails.yaml` |
+| **marriage/family guardrails** | — | Marriage, sex, and adversarial framing by theology | **✅ Ported** | 20 tests in `marriage_family_guardrails.yaml` |
 
 ---
 
@@ -73,15 +76,15 @@ We **port** evals that only need **prompt + response (+ theology/profile/bible_i
 - **`promptfooconfig.yaml`** - Production (default, auto-discovered by promptfoo)
 - **`promptfooconfig.staging.yaml`** - Staging (internal use only)
 - **`promptfooconfig.local.yaml`** - Local development (internal use only)
-- **`promptfooconfig.openai.yaml`** - OpenAI GPT-4.1 comparison (passage citation only, excludes Gamaliel-specific tests)
+- **`promptfooconfig.openai.yaml`** - OpenAI GPT-4.1-mini comparison (passage citation, Nicene guardrails, and marriage/family guardrails)
 
 **Key design decisions:**
 
 1. **Provider-agnostic tests:** All test files have **no hardcoded providers**. They use template variables (`theology`, `profile`, `bible_id`) from test vars.
 2. **HTTP providers:** Gamaliel configs (prod/staging/local) use HTTP providers with URLs as provider IDs (required by promptfoo).
 3. **OpenAI provider:** OpenAI config uses native `openai:chat:gpt-4.1` provider (no Gamaliel-specific params).
-4. **Template variables:** Gamaliel provider configs use `{{ theology | default('default') }}`, `{{ profile | default('universal_explorer') }}`, `{{ bible_id | default('eng-web') }}` to pick up values from test vars.
-5. **Test suite selection:** Gamaliel configs reference all test files. OpenAI config only includes `passage_citation.yaml` (excludes tests requiring `theology`, `profile`, `bible_id` params).
+4. **Template variables:** Gamaliel provider configs use `{{ theology | default('default') }}`, `{{ profile | default('read_regularly') }}`, `{{ bible_id | default('eng-web') }}` to pick up values from test vars.
+5. **Test suite selection:** Gamaliel configs reference the main suite, including familiarity adaptation and cross-tier doctrine checks. OpenAI config includes passage citation, Nicene guardrails, and marriage/family guardrails. It excludes tests that require Gamaliel `theology`, `profile`, or `bible_id` behavior.
 
 **Why separate configs:** Each environment has a different API endpoint. OpenAI config enables comparison with standard OpenAI while excluding Gamaliel-specific functionality. Using separate configs makes it clear which environment/comparison you're testing against.
 
@@ -94,14 +97,17 @@ gamaliel-evals/
 ├── promptfooconfig.yaml              # Production config (default)
 ├── promptfooconfig.staging.yaml      # Staging config (internal)
 ├── promptfooconfig.local.yaml        # Local config (internal)
-├── promptfooconfig.openai.yaml       # OpenAI comparison config (passage citation only)
+├── promptfooconfig.openai.yaml       # OpenAI comparison (passage, Nicene, marriage/family)
 ├── eval/
 │   ├── tests/
-│   │   ├── smoke.yaml                # 1 test - quick validation
-│   │   ├── passage_citation.yaml     # 21 tests
-│   │   ├── theology_compliance.yaml  # 11 tests
-│   │   ├── profile_adaptation.yaml  # 16 tests
-│   │   └── language_compliance.yaml  # 12 tests
+│   │   ├── smoke.yaml                     # 1 test - quick validation
+│   │   ├── passage_citation.yaml          # 21 tests
+│   │   ├── theology_compliance.yaml       # 18 tests
+│   │   ├── profile_adaptation.yaml        # 14 tests
+│   │   ├── familiarity_guardrails.yaml    # 28 tests
+│   │   ├── language_compliance.yaml       # 12 tests
+│   │   ├── nicene_guardrails.yaml         # 12 tests
+│   │   └── marriage_family_guardrails.yaml # 20 tests
 │   ├── validate-env.js               # Environment validation hook
 │   ├── theologies.yaml               # Theology definitions (if exists)
 │   └── profiles.yaml                 # Profile definitions (if exists)
@@ -126,7 +132,7 @@ bun run eval:staging
 # Local (internal - requires backend running)
 bun run eval:local
 
-# OpenAI comparison (passage citation only)
+# OpenAI comparison (passage citation, Nicene, marriage/family)
 bun run eval:openai
 
 # Smoke tests only
@@ -170,10 +176,12 @@ bun run eval:report /tmp/results.json
 |---|------|--------|------------|--------|
 | 1 | `eval/tests/smoke.yaml` | ✅ Done | 1 | Quick validation test |
 | 2 | `eval/tests/passage_citation.yaml` | ✅ Done | 21 | contains/icontains + llm-rubric |
-| 3 | `eval/tests/theology_compliance.yaml` | ✅ Done | 11 | vars (prompt, theology) + llm-rubric |
-| 4 | `eval/tests/profile_adaptation.yaml` | ✅ Done | 16 | vars (prompt, profile) + llm-rubric |
-| 5 | `eval/tests/language_compliance.yaml` | ✅ Done | 12 | es/ko/pt, contains + js for Hangul |
-| 6 | `eval/tests/guardrails.yaml` | ⏳ Optional | — | New: core doctrines; theology: all or multi-provider |
+| 3 | `eval/tests/theology_compliance.yaml` | ✅ Done | 18 | vars (prompt, theology); default profile `read_regularly`; threshold 1.0 |
+| 4 | `eval/tests/profile_adaptation.yaml` | ✅ Done | 14 | four familiarity levels; llm-rubric; threshold 1.0 |
+| 5 | `eval/tests/familiarity_guardrails.yaml` | ✅ Done | 28 | 7 doctrine prompts × 4 familiarity levels; threshold 1.0 |
+| 6 | `eval/tests/language_compliance.yaml` | ✅ Done | 12 | es/ko/pt, contains + js for Hangul |
+| 7 | `eval/tests/nicene_guardrails.yaml` | ✅ Done | 12 | core doctrines; default profile; threshold 1.0 |
+| 8 | `eval/tests/marriage_family_guardrails.yaml` | ✅ Done | 20 | marriage, sex, adversarial framing; threshold 1.0 |
 
 ---
 
@@ -184,7 +192,7 @@ bun run eval:report /tmp/results.json
 | 1 | `promptfooconfig.yaml` | ✅ Done | **Production config:** All test files, HTTP provider with template variables |
 | 2 | `promptfooconfig.staging.yaml` | ✅ Done | **Staging config:** Same tests, staging endpoint (internal) |
 | 3 | `promptfooconfig.local.yaml` | ✅ Done | **Local config:** Same tests, local endpoint (internal) |
-| 4 | `promptfooconfig.openai.yaml` | ✅ Done | **OpenAI comparison:** Passage citation only, native OpenAI provider (excludes Gamaliel-specific tests) |
+| 4 | `promptfooconfig.openai.yaml` | ✅ Done | **OpenAI comparison:** Passage citation, Nicene guardrails, and marriage/family guardrails |
 
 ---
 

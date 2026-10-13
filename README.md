@@ -24,7 +24,7 @@ bun install
 bun run eval                 # prod (api.gamaliel.ai)
 bun run eval:staging         # staging
 bun run eval:local          # local API (api.localhost:8000)
-bun run eval:openai         # OpenAI GPT-4o-mini (passage citation only, for comparison)
+bun run eval:openai         # OpenAI GPT-4.1-mini (passage, Nicene, marriage/family)
 bun run eval:smoke          # smoke tests (prod)
 bun run eval:smoke:staging  # smoke tests (staging)
 bun run eval:smoke:local    # smoke tests (local)
