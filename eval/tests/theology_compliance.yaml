@@ -1,5 +1,7 @@
 # Theology compliance – ported from evals/chat_agent/test_cases/theology_compliance.json
-# vars: prompt, theology (profile comes from defaultTest in main config). Assertions: llm-rubric.
+# vars: prompt, theology. Profile stays on the config default, read_regularly.
+# Cross-tier doctrine checks live in familiarity_guardrails.yaml.
+# Assertions: llm-rubric. Only a score of 1.0 passes.
 # --- Reformed ---
 - description: Reformed theology – salvation should emphasize God's sovereignty and election
   vars:
@@ -7,7 +9,9 @@
     theology: reformed
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Reformed theology: response should align with Reformed soteriology.
         Score 1.0: Response emphasizes grace, faith, and/or God's role in salvation; does not present salvation as earned by works.
         Score 0.5: Response mentions grace/faith but also emphasizes human choice or is neutral.
@@ -19,7 +23,9 @@
     theology: reformed
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Reformed theology: response should affirm God's sovereignty.
         Score 1.0: Response affirms God's sovereignty, control, or will over creation/events.
         Score 0.5: Response acknowledges God's sovereignty but also mentions human free will or is somewhat balanced.
@@ -31,7 +37,9 @@
     theology: reformed
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Reformed theology: response should emphasize Scripture as final authority.
         Score 1.0: Response emphasizes Scripture as final, sole, or sufficient authority.
         Score 0.5: Response emphasizes Scripture but also mentions tradition or other sources.
@@ -44,7 +52,9 @@
     theology: catholic
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Catholic theology: response should present Tradition alongside Scripture.
         Score 1.0: Response presents Tradition (and/or Magisterium) alongside Scripture as part of Christian faith.
         Score 0.5: Response mentions both Scripture and Tradition but doesn't clearly present them as equal.
@@ -56,7 +66,9 @@
     theology: catholic
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Catholic theology: response should describe the Eucharist as Real Presence.
         Score 1.0: Response describes communion as Christ's body and blood truly present (Real Presence).
         Score 0.5: Response mentions Real Presence but also discusses symbolic aspects or is somewhat ambiguous.
@@ -69,7 +81,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should present both sides of this debated topic.
         Score 1.0: Response acknowledges disagreement and presents both complementarian and egalitarian views with scriptural support.
         Score 0.5: Response mentions both views but doesn't provide scriptural support for both, or leans toward one side.
@@ -81,7 +95,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should present both interpretations of these passages.
         Score 1.0: Response acknowledges different interpretations and presents both restrictive and egalitarian readings with scriptural support.
         Score 0.5: Response mentions both interpretations but doesn't provide equal scriptural support, or leans toward one side.
@@ -93,7 +109,9 @@
     theology: default
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Default theology: response should present both sides of this debated topic.
         Score 1.0: Response acknowledges disagreement and presents both complementarian and egalitarian views with scriptural support.
         Score 0.5: Response mentions both views but doesn't provide equal scriptural support, or leans toward one side.
@@ -106,7 +124,9 @@
     theology: anglican
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Egalitarian theologies: response should acknowledge women in ministry as legitimate.
         Score 1.0: Response affirms or acknowledges women in ministry/leadership and cites scriptural examples.
         Score 0.5: Response acknowledges women in ministry but doesn't cite scriptural examples, or mentions both sides.
@@ -118,7 +138,9 @@
     theology: anglican
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Egalitarian theologies: response should support women in ordained ministry.
         Score 1.0: Response offers contextual reading and concludes these passages don't prohibit women as pastors/elders.
         Score 0.5: Response acknowledges both interpretations but leans toward supporting women in ministry.
@@ -130,7 +152,9 @@
     theology: anglican
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Egalitarian theologies: response should affirm women as bishops.
         Score 1.0: Response affirms women can serve as bishops with scriptural or theological support.
         Score 0.5: Response acknowledges both views but leans toward supporting women as bishops.
@@ -143,7 +167,9 @@
     theology: reformed
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Reformed theology: response should present complementarian position as this tradition's teaching.
         Score 1.0: Clearly presents complementarian position (women should not serve as pastors/elders) as Reformed teaching. May cite 1 Timothy 2:12, 1 Timothy 3:2, Titus 1:6. Does NOT present egalitarian position as equally valid for this tradition.
         Score 0.5: Presents complementarian position but hedges or presents as debatable within the tradition.
@@ -155,7 +181,9 @@
     theology: baptist
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Baptist theology: response should present complementarian position as this tradition's teaching.
         Score 1.0: Clearly presents complementarian position (women should not serve as pastors/elders) as Baptist teaching. May cite 1 Timothy 2:12 or similar. Does NOT present egalitarian position as equally valid for this tradition.
         Score 0.5: Presents complementarian position but hedges or presents as debatable within the tradition.
@@ -167,7 +195,9 @@
     theology: catholic
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Catholic theology: response should present that the Church does not ordain women to the priesthood.
         Score 1.0: Clearly presents that the Catholic Church teaches that women cannot be ordained priests. May cite tradition, apostolic succession, or magisterial teaching. Does NOT present egalitarian position as Catholic teaching.
         Score 0.5: Presents traditional position but hedges or presents as debatable within Catholicism.
@@ -179,7 +209,9 @@
     theology: eastern_orthodox
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Eastern Orthodox theology: response should present that women cannot be ordained priests.
         Score 1.0: Clearly presents that Orthodox tradition teaches that women cannot serve as priests. May cite tradition or apostolic practice. Does NOT present egalitarian position as Orthodox teaching.
         Score 0.5: Presents traditional position but hedges or presents as debatable within the tradition.
@@ -192,7 +224,9 @@
     theology: charismatic
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Charismatic theology: response should present a balanced picture of real diversity in the movement.
         Score 1.0: Clearly presents that some Charismatic churches hold an egalitarian view (women may serve as pastors/elders) while others hold a complementarian view (pastoral/elder headship is reserved for men). Treats both as genuine Charismatic positions, not as a single official teaching.
         Score 0.5: Mentions both views but leans toward one as the real Charismatic position, or notes diversity without explaining both sides.
@@ -205,7 +239,9 @@
     theology: wesleyan
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Wesleyan/Methodist theology: response should present egalitarian position as this tradition's teaching.
         Score 1.0: Clearly presents egalitarian position (women can serve as pastors) as Wesleyan/Methodist teaching. Cites scriptural examples (Phoebe, Junia, Priscilla, Deborah, Galatians 3:28, Acts 2:17-18) or sanctification/redemption reasoning. Does NOT present complementarian position as the tradition's teaching.
         Score 0.5: Presents egalitarian position but hedges or mentions both sides without clearly affirming women in ministry.
@@ -217,7 +253,9 @@
     theology: lutheran
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
         Lutheran theology: response should present egalitarian position as this tradition's teaching (ELCA and many Lutheran bodies ordain women).
         Score 1.0: Clearly presents egalitarian position (women can serve as pastors/ministers) as Lutheran teaching. Cites scriptural examples (Phoebe, Junia, priesthood of all believers, Galatians 3:28) or confessional reasoning. Does NOT present complementarian position as the tradition's teaching.
         Score 0.5: Presents egalitarian position but hedges or mentions both sides (e.g. ELCA vs LCMS) without clearly affirming women in ministry for the tradition.

@@ -1,222 +1,232 @@
-# Profile adaptation – ported from evals/chat_agent/test_cases/profile_adaptation.json
-# vars: prompt, profile. Assertions: llm-rubric (evaluation_criteria).
-# --- Same question, different profiles (eschatology / end times) ---
-- description: Curious Explorer – should explain eschatology simply
+# Bible familiarity adaptation.
+# Ported from the four-rung cases in gamaliel-web PR 453, with presentation
+# checks from the prompts PR 12 tier instructions.
+# Familiarity changes explanation, navigation help, and depth. It does not change doctrine.
+# vars: prompt, profile. Assertions: llm-rubric. Only a score of 1.0 passes.
+
+# --- Same question, different familiarity levels ---
+- description: New to the Bible – should explain eschatology simply
   vars:
     prompt: "What is eschatology?"
     theology: default
-    profile: curious_explorer
+    profile: new_to_the_bible
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response explains eschatology in an accessible way.
-        Score 1.0 if the response explains the term and uses mostly simple language. Some religious terms are okay if the overall explanation is clear.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response explains eschatology for someone new to the Bible.
+        Explain the idea in everyday words before citing it. Keep to one main idea, use at most 2 passage references, and avoid unexplained church vocabulary.
+        Score 1.0 if the term is explained in mostly simple language and the response does not assume prior knowledge.
         Score 0.5 if the explanation is unclear or uses heavy academic language throughout.
-        Score 0.0 if assumes they already know what eschatology means.
+        Score 0.0 if it assumes they already know what eschatology means.
 
-- description: Growing Christian – should explain with some assumed Bible knowledge
+- description: Basic familiarity – should explain with story-level knowledge
   vars:
     prompt: "What is eschatology?"
     theology: default
-    profile: growing_christian
+    profile: basic_familiarity
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response is appropriate for a regular Bible reader who wants to learn more.
-        The response should: Explain eschatology but can assume basic Bible familiarity; Connect to Scripture passages or themes; Be educational in tone.
-        Score 1.0 if explains the term while assuming some Bible knowledge.
-        Score 0.5 if either too basic or too advanced.
-        Score 0.0 if completely mismatched to the profile.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response fits someone who knows some Bible stories but may not navigate the text well.
+        Assume household names are known. Locate the idea in Scripture and place it in the larger storyline without assuming they can look books up unaided.
+        Score 1.0 if it explains the term and orients it in Scripture.
+        Score 0.5 if it treats them as knowing nothing of Jesus, or uses dense unexplained jargon.
+        Score 0.0 if the response is completely mismatched.
 
-- description: Mature Believer – should briefly clarify, peer tone
+- description: Read regularly – should explain with assumed Bible knowledge
   vars:
     prompt: "What is eschatology?"
     theology: default
-    profile: mature_believer
+    profile: read_regularly
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response is appropriate for an experienced believer who has studied the Bible for years.
-        The response should: Briefly clarify the term (they may not know academic terms); Connect to Scripture they likely know well; Treat them as an experienced peer, not a beginner.
-        Score 1.0 if appropriately respects their experience while clarifying the term.
-        Score 0.5 if partially appropriate.
-        Score 0.0 if treats them like a complete beginner or is overly academic.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response fits a regular Bible reader.
+        The response should explain eschatology, assume they can find books and already have some passage context, connect the term to Scripture, and include one insight a regular reader might miss. Do not teach Bible navigation from scratch.
+        Score 1.0 if it explains the term while assuming some Bible knowledge.
+        Score 0.5 if it is either too basic or too advanced.
+        Score 0.0 if it is completely mismatched to the profile.
 
-- description: Biblical Scholar – should discuss substantively without over-explaining
+- description: Study in depth – should briefly clarify in a peer tone
   vars:
     prompt: "What is eschatology?"
     theology: default
-    profile: biblical_scholar
+    profile: study_in_depth
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response engages with eschatology at an appropriate level for someone familiar with theology.
-        Score 1.0 if the response discusses eschatology substantively without excessive hand-holding. Brief context is fine; over-explaining basic concepts is not.
-        Score 0.5 if treats them like a complete beginner with lengthy basic explanations.
-        Score 0.0 if the response is condescending or overly simplified.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response fits someone who studies with cross-references and commentaries.
+        Briefly clarify the term, connect it to Scripture they likely know, and use structure or cross-references that affect the reading. Treat them as a practiced student. Do not require seminary or original-language training.
+        Score 1.0 if it respects their study practice while clarifying the term.
+        Score 0.5 if it is only partially appropriate.
+        Score 0.0 if it treats them like a complete beginner or insists on academic guild debate.
 
-- description: Curious Explorer – should explain end times accessibly
+- description: New to the Bible – should explain the end times accessibly
   vars:
     prompt: "How does the Bible describe the end times?"
     theology: default
-    profile: curious_explorer
+    profile: new_to_the_bible
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response explains the end times accessibly.
-        Score 1.0 if the response explains the concept clearly and doesn't assume deep Bible knowledge. Some biblical references are fine if the overall message is clear.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response explains the end times for someone new to the Bible.
+        Use everyday words first, one main idea, and at most 2 passage references. Explain who biblical figures are, and explain any church vocabulary in the same sentence.
+        Score 1.0 if the concept is clear and does not assume deep Bible knowledge.
         Score 0.5 if the explanation is confusing or uses heavy unexplained jargon.
-        Score 0.0 if assumes they already understand biblical concepts.
+        Score 0.0 if it assumes they already understand biblical concepts.
 
-- description: Biblical Scholar – should engage with academic complexity
+- description: Study in depth – should use structure and related texts for the end times
   vars:
     prompt: "How does the Bible describe the end times?"
     theology: default
-    profile: biblical_scholar
+    profile: study_in_depth
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response engages at an academic level.
-        The response should: Use technical vocabulary (eschatology, apocalyptic, etc.); Engage with complexity and nuance; Not over-simplify.
-        Score 1.0 if engages academically with appropriate depth.
-        Score 0.5 if partially academic but too simple.
-        Score 0.0 if treats them like a beginner.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response has study depth without treating the user as a beginner.
+        Assume they know major end-times passages exist. Use structure or cross-references that affect the reading. Do not require named scholars or original-language work, and do not retell the story as a children's overview.
+        Score 1.0 if it offers a careful, text-grounded reading.
+        Score 0.5 if it is helpful but too simple.
+        Score 0.0 if it treats them like a beginner.
 
-# --- Application / mentoring ---
-- description: Mature Believer – should provide helpful guidance on sharing God's love
-  vars:
-    prompt: "How can I help someone understand God's love?"
-    theology: default
-    profile: mature_believer
-  assert:
-    - type: llm-rubric
-      value: |
-        Evaluate whether the response is helpful for someone wanting to share about God's love.
-        Score 1.0 if the response provides helpful, Scripture-grounded guidance. It doesn't need to explicitly focus on 'mentoring' — practical wisdom about sharing God's love is sufficient.
-        Score 0.5 if the response is generic or unhelpful.
-        Score 0.0 if treats them like they don't know about God's love themselves.
-
-- description: Growing Christian – should be educational and growth-oriented
+# --- Application and pastoral tone ---
+- description: Read regularly – should give applicable guidance
   vars:
     prompt: "How can I apply this passage to my daily life?"
     theology: default
-    profile: growing_christian
+    profile: read_regularly
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response helps someone grow in their faith.
-        The response should: Provide practical application guidance; Be educational and encouraging; Appropriate depth for a regular Bible reader.
-        Score 1.0 if provides helpful, growth-oriented application.
-        Score 0.5 if helpful but misses the growth angle.
-        Score 0.0 if inappropriate for the profile.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response helps a regular Bible reader apply the passage.
+        Give practical, encouraging guidance at a regular reader's depth, with one insight they might miss. Do not teach Bible navigation from scratch.
+        Score 1.0 if the application is helpful and fits a regular reader.
+        Score 0.5 if it is helpful but thin.
+        Score 0.0 if it is inappropriate for the profile.
 
-- description: Biblical Scholar – technical question, academic engagement
-  vars:
-    prompt: "What are the hermeneutical implications of intertextuality in Hebrews' use of Psalm 110?"
-    theology: default
-    profile: biblical_scholar
-  assert:
-    - type: llm-rubric
-      value: |
-        Evaluate whether the response engages with a technical scholarly question appropriately.
-        The response should: Use technical terms (hermeneutics, intertextuality) without basic definitions; Engage at an academic level; Discuss the question substantively.
-        Score 1.0 if engages academically without over-explaining terms.
-        Score 0.5 if partially academic but defines basic terms.
-        Score 0.0 if treats them like a non-academic.
-
-- description: New Believer – should address doubt helpfully
+- description: New to the Bible – should address doubt without shame
   vars:
     prompt: "I'm struggling with doubt. What should I do?"
     theology: default
-    profile: new_believer
+    profile: new_to_the_bible
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response addresses doubt helpfully.
-        Score 1.0 if the response acknowledges doubt and offers guidance (Scripture, prayer, etc.). It doesn't need to be overly warm — just helpful and not shaming.
-        Score 0.5 if the response ignores their struggle or is dismissive.
-        Score 0.0 if the response shames them for doubting.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response addresses doubt helpfully for someone new to the Bible.
+        Use everyday words, one main idea, and at most 2 passage references. Do not shame the question or assume church vocabulary.
+        Score 1.0 if it acknowledges doubt and offers guidance such as Scripture or prayer.
+        Score 0.5 if it ignores their struggle or is dismissive.
+        Score 0.0 if it shames them for doubting.
 
-# --- Biblical familiarity (Curious Explorer = beginner context) ---
-- description: Curious Explorer – should explain Moses for a beginner
+# --- Assumed knowledge ---
+- description: New to the Bible – should explain Moses for a beginner
   vars:
     prompt: "Who was Moses?"
     theology: default
-    profile: curious_explorer
+    profile: new_to_the_bible
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response explains Moses accessibly for someone new to the Bible.
-        The response should: Explain who Moses was (not assume they know); Provide some context about where his story appears; Be accessible to a beginner.
-        Score 1.0 if explains Moses clearly and provides context.
-        Score 0.5 if explains Moses but assumes some biblical knowledge.
-        Score 0.0 if assumes they already know who Moses is.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response explains Moses for someone new to the Bible.
+        Explain who Moses was before citing him, say where the story is found in plain words, keep to one main idea, and use at most 2 passage references.
+        Score 1.0 if it explains Moses clearly and provides context.
+        Score 0.5 if it explains Moses but assumes some biblical knowledge.
+        Score 0.0 if it assumes they already know who Moses is.
 
-- description: Curious Explorer – should explain Genesis as a Bible book for a beginner
+- description: New to the Bible – should explain Genesis as a Bible book
   vars:
     prompt: "What is Genesis about?"
     theology: default
-    profile: curious_explorer
+    profile: new_to_the_bible
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response explains Genesis accessibly for someone new to the Bible.
-        The response should: Explain that Genesis is a book of the Bible (or at least make this clear); Describe what it's about in simple terms; Be accessible to a beginner.
-        Score 1.0 if clearly identifies Genesis as a Bible book and explains its content accessibly.
-        Score 0.5 if explains the content but doesn't clarify Genesis is a Bible book.
-        Score 0.0 if assumes they know what Genesis is.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response explains Genesis for someone new to the Bible.
+        Make clear that Genesis is a book of the Bible, describe it in simple terms, and keep to one main idea with at most 2 passage references.
+        Score 1.0 if it identifies Genesis as a Bible book and explains its content accessibly.
+        Score 0.5 if it explains the content but does not clarify that Genesis is a Bible book.
+        Score 0.0 if it assumes they know what Genesis is.
 
-- description: Curious Explorer – should tell Noah story accessibly
+- description: New to the Bible – should tell the Noah story accessibly
   vars:
     prompt: "Tell me about Noah and the flood"
     theology: default
-    profile: curious_explorer
+    profile: new_to_the_bible
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response tells the Noah story accessibly for someone new to the Bible.
-        The response should: Tell the story clearly; Mention it's from the Bible (providing context); Be accessible to a beginner.
-        Score 1.0 if tells the story clearly and provides biblical context.
-        Score 0.5 if tells the story but limited context.
-        Score 0.0 if assumes they know the story or significant Bible knowledge.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response tells the Noah story for someone new to the Bible.
+        Tell the story in everyday words, say that it is in the Bible, explain who Noah is, and use at most 2 passage references.
+        Score 1.0 if it tells the story clearly and provides biblical context.
+        Score 0.5 if it tells the story but gives limited context.
+        Score 0.0 if it assumes they know the story or significant Bible knowledge.
 
-- description: Growing Christian – should provide substantive info about Moses
+- description: Basic familiarity – should locate Abraham's story
+  vars:
+    prompt: "Where is the story of Abraham in the Bible?"
+    theology: default
+    profile: basic_familiarity
+  assert:
+    - type: llm-rubric
+      threshold: 1.0
+      value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response helps someone who already knows Abraham find the story in the text.
+        Assume Abraham is a known name. Locate the story in Genesis and orient them in the larger storyline without assuming they can navigate unaided.
+        Score 1.0 if it locates Abraham in Genesis, or an equivalent clear location, and orients them.
+        Score 0.5 if it retells the story but never says where to look.
+        Score 0.0 if it assumes they already know the book and chapter, or treats Abraham as unknown.
+
+- description: Read regularly – should give substantive information about Moses
   vars:
     prompt: "Who was Moses?"
     theology: default
-    profile: growing_christian
+    profile: read_regularly
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response provides a substantive answer about Moses.
-        Score 1.0 if the response provides good information about Moses with Scripture references or insights. It can include basic facts as long as it also provides depth.
-        Score 0.5 if the response is thin or lacks substance.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response gives a regular Bible reader a substantive answer about Moses.
+        Assume they can find the books. Include Scripture or an insight a regular reader might miss. Basic facts may appear only alongside that depth. Do not teach Bible navigation from scratch.
+        Score 1.0 if it provides substance with Scripture references or insights.
+        Score 0.5 if the response is thin.
         Score 0.0 if the response is unhelpful or wrong.
 
-- description: Mature Believer – should assume deep knowledge, provide insights
+- description: Study in depth – should assume the Exodus story and add insight
   vars:
     prompt: "What was Moses' role in the Exodus?"
     theology: default
-    profile: mature_believer
+    profile: study_in_depth
   assert:
     - type: llm-rubric
+      threshold: 1.0
       value: |
-        Evaluate whether the response is appropriate for someone with deep Bible knowledge.
-        The response should: Assume they know Moses and the Exodus story; Provide insights, connections, or depth; Treat them as experienced.
-        Score 1.0 if provides depth and assumes biblical knowledge.
-        Score 0.5 if helpful but somewhat basic.
-        Score 0.0 if explains who Moses is like they're a beginner.
-
-- description: Biblical Scholar – should assume scholarly knowledge, no basics
-  vars:
-    prompt: "What was Moses' role in the Exodus?"
-    theology: default
-    profile: biblical_scholar
-  assert:
-    - type: llm-rubric
-      value: |
-        Evaluate whether the response is appropriate for a theologian or scholar.
-        The response should: Assume comprehensive knowledge of Moses and Exodus; Engage at a scholarly level (can use technical terms); Not explain basic facts.
-        Score 1.0 if engages at scholarly level without basic explanations.
-        Score 0.5 if somewhat scholarly but too basic.
-        Score 0.0 if explains who Moses is or basic Exodus facts.
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        Evaluate whether the response fits someone who already knows the Exodus story and uses study tools.
+        Assume they know Moses and the Exodus. Provide structure, connections, or cross-references that affect the reading. Do not require seminary or original languages, and do not explain who Moses is.
+        Score 1.0 if it provides depth and assumes biblical knowledge.
+        Score 0.5 if it is helpful but somewhat basic.
+        Score 0.0 if it explains who Moses is as though they are a beginner.

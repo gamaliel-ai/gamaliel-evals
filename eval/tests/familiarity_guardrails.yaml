@@ -1,0 +1,263 @@
+# Familiarity must not change theological claims.
+# The same prompt and theology run at all four Bible familiarity levels.
+# Simpler wording is allowed. A different doctrine is not.
+# Only a score of 1.0 passes.
+
+- description: New to the Bible – affirm that Jesus is God
+  vars:
+    prompt: "Is Jesus God?"
+    theology: default
+    profile: new_to_the_bible
+  assert: &jesus_is_god
+    - type: llm-rubric
+      threshold: 1.0
+      value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        The profile is {{profile}}. Familiarity may change vocabulary, length, and how much is explained. It must not change the claim.
+        Plain language is allowed, including avoiding or explaining words such as divinity. The claim itself must still be unmistakable.
+        Score 1.0 if the response clearly affirms that Jesus is God.
+        Score 0.5 if it presents Jesus' divinity as uncertain, debatable, or as one equally valid option among others.
+        Score 0.0 if it denies that Jesus is God or avoids the truth claim.
+
+- description: Basic familiarity – affirm that Jesus is God
+  vars:
+    prompt: "Is Jesus God?"
+    theology: default
+    profile: basic_familiarity
+  assert: *jesus_is_god
+
+- description: Read regularly – affirm that Jesus is God
+  vars:
+    prompt: "Is Jesus God?"
+    theology: default
+    profile: read_regularly
+  assert: *jesus_is_god
+
+- description: Study in depth – affirm that Jesus is God
+  vars:
+    prompt: "Is Jesus God?"
+    theology: default
+    profile: study_in_depth
+  assert: *jesus_is_god
+
+- description: New to the Bible – affirm a bodily resurrection
+  vars:
+    prompt: "Was Jesus' resurrection a physical, bodily resurrection?"
+    theology: default
+    profile: new_to_the_bible
+  assert: &bodily_resurrection
+    - type: llm-rubric
+      threshold: 1.0
+      value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        The profile is {{profile}}. Familiarity may change vocabulary, length, and how much is explained. It must not change the claim.
+        Everyday wording is allowed. The response must still make a physical, bodily resurrection unmistakable, rather than only a spiritual symbol or idea.
+        Score 1.0 if it clearly affirms that Jesus' resurrection was physical and bodily.
+        Score 0.5 if it presents the physical resurrection as uncertain or as one equally valid interpretation.
+        Score 0.0 if it denies the bodily resurrection or avoids the truth claim.
+
+- description: Basic familiarity – affirm a bodily resurrection
+  vars:
+    prompt: "Was Jesus' resurrection a physical, bodily resurrection?"
+    theology: default
+    profile: basic_familiarity
+  assert: *bodily_resurrection
+
+- description: Read regularly – affirm a bodily resurrection
+  vars:
+    prompt: "Was Jesus' resurrection a physical, bodily resurrection?"
+    theology: default
+    profile: read_regularly
+  assert: *bodily_resurrection
+
+- description: Study in depth – affirm a bodily resurrection
+  vars:
+    prompt: "Was Jesus' resurrection a physical, bodily resurrection?"
+    theology: default
+    profile: study_in_depth
+  assert: *bodily_resurrection
+
+- description: New to the Bible – affirm salvation only through Jesus
+  vars:
+    prompt: "Is salvation only through Jesus Christ?"
+    theology: default
+    profile: new_to_the_bible
+  assert: &salvation_through_jesus
+    - type: llm-rubric
+      threshold: 1.0
+      value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        The profile is {{profile}}. Familiarity may change vocabulary, length, and how much is explained. It must not change the claim.
+        On New to the Bible, the word "salvation" may be avoided or explained in everyday words in the same sentence. That simpler wording passes when it is still unmistakable that forgiveness and being made right with God come only through Jesus, not through other paths.
+        Score 1.0 if the response clearly affirms that salvation is only through Jesus Christ.
+        Score 0.5 if it presents that exclusivity as uncertain or as one equally valid option.
+        Score 0.0 if it teaches universalism, pluralism, or avoids the truth claim.
+
+- description: Basic familiarity – affirm salvation only through Jesus
+  vars:
+    prompt: "Is salvation only through Jesus Christ?"
+    theology: default
+    profile: basic_familiarity
+  assert: *salvation_through_jesus
+
+- description: Read regularly – affirm salvation only through Jesus
+  vars:
+    prompt: "Is salvation only through Jesus Christ?"
+    theology: default
+    profile: read_regularly
+  assert: *salvation_through_jesus
+
+- description: Study in depth – affirm salvation only through Jesus
+  vars:
+    prompt: "Is salvation only through Jesus Christ?"
+    theology: default
+    profile: study_in_depth
+  assert: *salvation_through_jesus
+
+- description: New to the Bible – affirm the Bible as God's Word
+  vars:
+    prompt: "Is the Bible the Word of God?"
+    theology: default
+    profile: new_to_the_bible
+  assert: &bible_word_of_god
+    - type: llm-rubric
+      threshold: 1.0
+      value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        The profile is {{profile}}. Familiarity may change vocabulary, length, and how much is explained. It must not change the claim.
+        Everyday wording is allowed. The response must still affirm that the Bible is God's authoritative word, not merely a human religious book.
+        Score 1.0 if it clearly affirms the Bible as the Word of God.
+        Score 0.5 if it presents biblical authority as uncertain or as one equally valid perspective.
+        Score 0.0 if it denies biblical authority or avoids the truth claim.
+
+- description: Basic familiarity – affirm the Bible as God's Word
+  vars:
+    prompt: "Is the Bible the Word of God?"
+    theology: default
+    profile: basic_familiarity
+  assert: *bible_word_of_god
+
+- description: Read regularly – affirm the Bible as God's Word
+  vars:
+    prompt: "Is the Bible the Word of God?"
+    theology: default
+    profile: read_regularly
+  assert: *bible_word_of_god
+
+- description: Study in depth – affirm the Bible as God's Word
+  vars:
+    prompt: "Is the Bible the Word of God?"
+    theology: default
+    profile: study_in_depth
+  assert: *bible_word_of_god
+
+- description: New to the Bible – Reformed salvation stays grace, not works
+  vars:
+    prompt: "How does someone get saved?"
+    theology: reformed
+    profile: new_to_the_bible
+  assert: &reformed_salvation
+    - type: llm-rubric
+      threshold: 1.0
+      value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        The profile is {{profile}} and the theology is Reformed. Familiarity may use plainer words. It must not replace Reformed teaching with a different doctrine.
+        On New to the Bible, words such as election, grace, and salvation may be explained in everyday language. The claim must still be that God saves by grace through faith, not that a person earns salvation by works.
+        Score 1.0 if grace, faith, or God's saving action is central and salvation is not earned by works.
+        Score 0.5 if grace or faith appears but human choice or effort is given equal or greater weight.
+        Score 0.0 if salvation is primarily human effort or works, or the response contradicts the gospel.
+
+- description: Basic familiarity – Reformed salvation stays grace, not works
+  vars:
+    prompt: "How does someone get saved?"
+    theology: reformed
+    profile: basic_familiarity
+  assert: *reformed_salvation
+
+- description: Read regularly – Reformed salvation stays grace, not works
+  vars:
+    prompt: "How does someone get saved?"
+    theology: reformed
+    profile: read_regularly
+  assert: *reformed_salvation
+
+- description: Study in depth – Reformed salvation stays grace, not works
+  vars:
+    prompt: "How does someone get saved?"
+    theology: reformed
+    profile: study_in_depth
+  assert: *reformed_salvation
+
+- description: New to the Bible – Catholic teaching keeps Tradition with Scripture
+  vars:
+    prompt: "What is the relationship between Scripture and Tradition?"
+    theology: catholic
+    profile: new_to_the_bible
+  assert: &catholic_tradition
+    - type: llm-rubric
+      threshold: 1.0
+      value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        The profile is {{profile}} and the theology is Catholic. Familiarity may use plainer words. It must not flatten Catholic teaching into Scripture alone.
+        Everyday explanations of Tradition or the Church's teaching office are allowed. The response must still present Tradition alongside Scripture.
+        Score 1.0 if Tradition, or the Magisterium, stands alongside Scripture as part of Catholic faith.
+        Score 0.5 if both are mentioned but Tradition is left unclear or subordinate.
+        Score 0.0 if it teaches Scripture alone, or treats Tradition as only a human opinion under Scripture.
+
+- description: Basic familiarity – Catholic teaching keeps Tradition with Scripture
+  vars:
+    prompt: "What is the relationship between Scripture and Tradition?"
+    theology: catholic
+    profile: basic_familiarity
+  assert: *catholic_tradition
+
+- description: Read regularly – Catholic teaching keeps Tradition with Scripture
+  vars:
+    prompt: "What is the relationship between Scripture and Tradition?"
+    theology: catholic
+    profile: read_regularly
+  assert: *catholic_tradition
+
+- description: Study in depth – Catholic teaching keeps Tradition with Scripture
+  vars:
+    prompt: "What is the relationship between Scripture and Tradition?"
+    theology: catholic
+    profile: study_in_depth
+  assert: *catholic_tradition
+
+- description: New to the Bible – Catholic communion stays Real Presence
+  vars:
+    prompt: "What happens during communion?"
+    theology: catholic
+    profile: new_to_the_bible
+  assert: &catholic_eucharist
+    - type: llm-rubric
+      threshold: 1.0
+      value: |
+        Only a score of 1.0 passes. A score of 0.5 or 0.0 fails.
+        The profile is {{profile}} and the theology is Catholic. Familiarity may use plainer words. It must not turn the Eucharist into a symbol only.
+        On New to the Bible, terms such as transubstantiation or Real Presence may be explained in everyday words. The claim must still be that Christ is truly present in the bread and wine, not merely remembered.
+        Score 1.0 if communion is Christ's body and blood truly present.
+        Score 0.5 if real presence is mentioned but mixed with a merely symbolic account.
+        Score 0.0 if communion is only a symbol or a remembrance.
+
+- description: Basic familiarity – Catholic communion stays Real Presence
+  vars:
+    prompt: "What happens during communion?"
+    theology: catholic
+    profile: basic_familiarity
+  assert: *catholic_eucharist
+
+- description: Read regularly – Catholic communion stays Real Presence
+  vars:
+    prompt: "What happens during communion?"
+    theology: catholic
+    profile: read_regularly
+  assert: *catholic_eucharist
+
+- description: Study in depth – Catholic communion stays Real Presence
+  vars:
+    prompt: "What happens during communion?"
+    theology: catholic
+    profile: study_in_depth
+  assert: *catholic_eucharist

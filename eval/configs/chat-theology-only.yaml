@@ -24,7 +24,7 @@ defaultTest:
   vars:
     prompt: "What does the Bible say about love?"
     theology: default
-    profile: universal_explorer
+    profile: read_regularly
     bible_id: eng-web
 
 tests:

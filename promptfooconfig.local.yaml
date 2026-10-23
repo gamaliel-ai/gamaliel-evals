@@ -1,5 +1,6 @@
 # Evals against Gamaliel API on a local development server (Internal gamailel development use only).
-# Full suite: passage citation, theology compliance, profile adaptation, language compliance.
+# Full suite: passage citation, theology, Bible familiarity, language, and guardrails.
+# Default profile is read_regularly. Familiarity-specific cases set profile themselves.
 # Requires OPENAI_API_KEY in environment and local backend running on api.localhost:8000.
 # Run with: bunx promptfoo eval -c promptfooconfig.local.yaml -j 50
 
@@ -31,7 +32,7 @@ providers:
           - role: "user"
             content: "{{ prompt }}"
         theology: "{{ theology | default('default') }}"
-        profile: "{{ profile | default('universal_explorer') }}"
+        profile: "{{ profile | default('read_regularly') }}"
         bible_id: "{{ bible_id | default('eng-web') }}"
         stream: false
       transformResponse: "json.choices[0].message.content"
@@ -40,7 +41,7 @@ defaultTest:
   vars:
     prompt: "What does the Bible say about love?"
     theology: default
-    profile: universal_explorer
+    profile: read_regularly
     bible_id: eng-web
 
 # Full test suite
@@ -48,6 +49,7 @@ tests:
   - file://eval/tests/passage_citation.yaml
   - file://eval/tests/theology_compliance.yaml
   - file://eval/tests/profile_adaptation.yaml
+  - file://eval/tests/familiarity_guardrails.yaml
   - file://eval/tests/language_compliance.yaml
   - file://eval/tests/nicene_guardrails.yaml
   - file://eval/tests/marriage_family_guardrails.yaml

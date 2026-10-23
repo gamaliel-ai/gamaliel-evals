@@ -1,10 +1,8 @@
 # Profile IDs (must match gamaliel-prompts/profiles/*.yml slug or stem)
+# Bible familiarity ladder. Read regularly is the default when no level is chosen.
 # Used to generate the provider matrix. Update when adding profiles.
 profiles:
-  - universal_explorer
-  - biblical_scholar
-  - spiritual_seeker
-  - growing_christian
-  - new_believer
-  - mature_believer
-  - curious_explorer
+  - new_to_the_bible
+  - basic_familiarity
+  - read_regularly
+  - study_in_depth
