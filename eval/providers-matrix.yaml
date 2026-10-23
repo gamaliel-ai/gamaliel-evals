@@ -4,7 +4,7 @@
 
 providers:
   - id: Gamaliel:default:new_to_the_bible
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -12,7 +12,7 @@ providers:
         profile: new_to_the_bible
 
   - id: Gamaliel:default:basic_familiarity
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -20,7 +20,7 @@ providers:
         profile: basic_familiarity
 
   - id: Gamaliel:default:read_regularly
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -28,7 +28,7 @@ providers:
         profile: read_regularly
 
   - id: Gamaliel:default:study_in_depth
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -36,7 +36,7 @@ providers:
         profile: study_in_depth
 
   - id: Gamaliel:catholic:new_to_the_bible
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -44,7 +44,7 @@ providers:
         profile: new_to_the_bible
 
   - id: Gamaliel:catholic:basic_familiarity
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -52,7 +52,7 @@ providers:
         profile: basic_familiarity
 
   - id: Gamaliel:catholic:read_regularly
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -60,7 +60,7 @@ providers:
         profile: read_regularly
 
   - id: Gamaliel:catholic:study_in_depth
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -68,7 +68,7 @@ providers:
         profile: study_in_depth
 
   - id: Gamaliel:anglican:new_to_the_bible
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -76,7 +76,7 @@ providers:
         profile: new_to_the_bible
 
   - id: Gamaliel:anglican:basic_familiarity
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -84,7 +84,7 @@ providers:
         profile: basic_familiarity
 
   - id: Gamaliel:anglican:read_regularly
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -92,7 +92,7 @@ providers:
         profile: read_regularly
 
   - id: Gamaliel:anglican:study_in_depth
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -100,7 +100,7 @@ providers:
         profile: study_in_depth
 
   - id: Gamaliel:lutheran:new_to_the_bible
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -108,7 +108,7 @@ providers:
         profile: new_to_the_bible
 
   - id: Gamaliel:lutheran:basic_familiarity
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -116,7 +116,7 @@ providers:
         profile: basic_familiarity
 
   - id: Gamaliel:lutheran:read_regularly
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -124,7 +124,7 @@ providers:
         profile: read_regularly
 
   - id: Gamaliel:lutheran:study_in_depth
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -132,7 +132,7 @@ providers:
         profile: study_in_depth
 
   - id: Gamaliel:eastern_orthodox:new_to_the_bible
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -140,7 +140,7 @@ providers:
         profile: new_to_the_bible
 
   - id: Gamaliel:eastern_orthodox:basic_familiarity
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -148,7 +148,7 @@ providers:
         profile: basic_familiarity
 
   - id: Gamaliel:eastern_orthodox:read_regularly
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -156,7 +156,7 @@ providers:
         profile: read_regularly
 
   - id: Gamaliel:eastern_orthodox:study_in_depth
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -164,7 +164,7 @@ providers:
         profile: study_in_depth
 
   - id: Gamaliel:baptist:new_to_the_bible
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -172,7 +172,7 @@ providers:
         profile: new_to_the_bible
 
   - id: Gamaliel:baptist:basic_familiarity
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -180,7 +180,7 @@ providers:
         profile: basic_familiarity
 
   - id: Gamaliel:baptist:read_regularly
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -188,7 +188,7 @@ providers:
         profile: read_regularly
 
   - id: Gamaliel:baptist:study_in_depth
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -196,7 +196,7 @@ providers:
         profile: study_in_depth
 
   - id: Gamaliel:charismatic:new_to_the_bible
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -204,7 +204,7 @@ providers:
         profile: new_to_the_bible
 
   - id: Gamaliel:charismatic:basic_familiarity
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -212,7 +212,7 @@ providers:
         profile: basic_familiarity
 
   - id: Gamaliel:charismatic:read_regularly
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -220,7 +220,7 @@ providers:
         profile: read_regularly
 
   - id: Gamaliel:charismatic:study_in_depth
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -228,7 +228,7 @@ providers:
         profile: study_in_depth
 
   - id: Gamaliel:reformed:new_to_the_bible
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -236,7 +236,7 @@ providers:
         profile: new_to_the_bible
 
   - id: Gamaliel:reformed:basic_familiarity
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -244,7 +244,7 @@ providers:
         profile: basic_familiarity
 
   - id: Gamaliel:reformed:read_regularly
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -252,7 +252,7 @@ providers:
         profile: read_regularly
 
   - id: Gamaliel:reformed:study_in_depth
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -260,7 +260,7 @@ providers:
         profile: study_in_depth
 
   - id: Gamaliel:wesleyan:new_to_the_bible
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -268,7 +268,7 @@ providers:
         profile: new_to_the_bible
 
   - id: Gamaliel:wesleyan:basic_familiarity
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -276,7 +276,7 @@ providers:
         profile: basic_familiarity
 
   - id: Gamaliel:wesleyan:read_regularly
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:
@@ -284,7 +284,7 @@ providers:
         profile: read_regularly
 
   - id: Gamaliel:wesleyan:study_in_depth
-    provider: openai:chat:gpt-4o-mini
+    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:

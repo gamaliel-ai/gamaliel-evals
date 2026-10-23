@@ -13,6 +13,8 @@ This doc tracks porting **internal ChatAgent evals** (`evals/chat_agent*`, main 
 | **Total main-suite cases** | 125 (21 passage + 18 theology + 14 familiarity adaptation + 28 familiarity guardrails + 12 language + 12 Nicene + 20 marriage/family). Smoke is separate (1). |
 | **Default profile** | `read_regularly` when a case does not set one |
 | **Configs** | **Four configs:** `promptfooconfig.yaml` (production), `promptfooconfig.staging.yaml` (internal), `promptfooconfig.local.yaml` (internal), `promptfooconfig.openai.yaml` (comparison) |
+| **Request model** | `gpt-5.6-luna` on the Gamaliel HTTP configs and the OpenAI comparison |
+| **llm-rubric grader** | `openai:chat:gpt-5.6-luna` via `defaultTest.options.provider` on every config |
 | **Default `bun run eval`** | Runs full suite against **production** (all main-suite tests × 1 provider). |
 | **Run against staging** | `bun run eval:staging` or `-c promptfooconfig.staging.yaml` |
 | **Run against local** | `bun run eval:local` or `-c promptfooconfig.local.yaml` |
@@ -76,15 +78,16 @@ We **port** evals that only need **prompt + response (+ theology/profile/bible_i
 - **`promptfooconfig.yaml`** - Production (default, auto-discovered by promptfoo)
 - **`promptfooconfig.staging.yaml`** - Staging (internal use only)
 - **`promptfooconfig.local.yaml`** - Local development (internal use only)
-- **`promptfooconfig.openai.yaml`** - OpenAI GPT-4.1-mini comparison (passage citation, Nicene guardrails, and marriage/family guardrails)
+- **`promptfooconfig.openai.yaml`** - OpenAI GPT-5.6-luna comparison (passage citation, Nicene guardrails, and marriage/family guardrails)
 
 **Key design decisions:**
 
 1. **Provider-agnostic tests:** All test files have **no hardcoded providers**. They use template variables (`theology`, `profile`, `bible_id`) from test vars.
-2. **HTTP providers:** Gamaliel configs (prod/staging/local) use HTTP providers with URLs as provider IDs (required by promptfoo).
-3. **OpenAI provider:** OpenAI config uses native `openai:chat:gpt-4.1` provider (no Gamaliel-specific params).
-4. **Template variables:** Gamaliel provider configs use `{{ theology | default('default') }}`, `{{ profile | default('read_regularly') }}`, `{{ bible_id | default('eng-web') }}` to pick up values from test vars.
-5. **Test suite selection:** Gamaliel configs reference the main suite, including familiarity adaptation and cross-tier doctrine checks. OpenAI config includes passage citation, Nicene guardrails, and marriage/family guardrails. It excludes tests that require Gamaliel `theology`, `profile`, or `bible_id` behavior.
+2. **HTTP providers:** Gamaliel configs (prod/staging/local) use HTTP providers with URLs as provider IDs (required by promptfoo) and request `model: gpt-5.6-luna`.
+3. **OpenAI provider:** OpenAI config uses native `openai:chat:gpt-5.6-luna` (no Gamaliel-specific params). Same model as the Gamaliel request, so the comparison isolates prompt and guardrails.
+4. **Grader:** Every config sets `defaultTest.options.provider` to `openai:chat:gpt-5.6-luna`, which promptfoo uses as the `llm-rubric` judge.
+5. **Template variables:** Gamaliel provider configs use `{{ theology | default('default') }}`, `{{ profile | default('read_regularly') }}`, `{{ bible_id | default('eng-web') }}` to pick up values from test vars.
+6. **Test suite selection:** Gamaliel configs reference the main suite, including familiarity adaptation and cross-tier doctrine checks. OpenAI config includes passage citation, Nicene guardrails, and marriage/family guardrails. It excludes tests that require Gamaliel `theology`, `profile`, or `bible_id` behavior.
 
 **Why separate configs:** Each environment has a different API endpoint. OpenAI config enables comparison with standard OpenAI while excluding Gamaliel-specific functionality. Using separate configs makes it clear which environment/comparison you're testing against.
 
@@ -189,10 +192,10 @@ bun run eval:report /tmp/results.json
 
 | # | File | Status | Notes |
 |---|------|--------|--------|
-| 1 | `promptfooconfig.yaml` | ✅ Done | **Production config:** All test files, HTTP provider with template variables |
-| 2 | `promptfooconfig.staging.yaml` | ✅ Done | **Staging config:** Same tests, staging endpoint (internal) |
-| 3 | `promptfooconfig.local.yaml` | ✅ Done | **Local config:** Same tests, local endpoint (internal) |
-| 4 | `promptfooconfig.openai.yaml` | ✅ Done | **OpenAI comparison:** Passage citation, Nicene guardrails, and marriage/family guardrails |
+| 1 | `promptfooconfig.yaml` | ✅ Done | **Production config:** All test files, HTTP provider requesting `gpt-5.6-luna`, luna grader |
+| 2 | `promptfooconfig.staging.yaml` | ✅ Done | **Staging config:** Same tests, staging endpoint (internal), luna request and grader |
+| 3 | `promptfooconfig.local.yaml` | ✅ Done | **Local config:** Same tests, local endpoint (internal), luna request and grader |
+| 4 | `promptfooconfig.openai.yaml` | ✅ Done | **OpenAI comparison:** `openai:chat:gpt-5.6-luna`; passage citation, Nicene guardrails, and marriage/family guardrails |
 
 ---
 

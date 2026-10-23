@@ -32,7 +32,7 @@ bun install
 | `bun run eval` | Evals vs prod (api.gamaliel.ai) |
 | `bun run eval:staging` | Evals vs staging |
 | `bun run eval:local` | Evals vs local API (api.localhost:8000) |
-| `bun run eval:openai` | Evals vs OpenAI GPT-4.1-mini (passage citation, Nicene, and marriage/family) |
+| `bun run eval:openai` | Evals vs OpenAI GPT-5.6-luna (passage citation, Nicene, and marriage/family) |
 | `bun run eval:view` | Open promptfoo web UI |
 | `bun run dev` | Next.js dev server |
 | `bun run build` | Production build |
@@ -82,6 +82,7 @@ For local evals: backend on 8000, `127.0.0.1 api.localhost` in `/etc/hosts`, and
 - Use Bun only for scripts (no Node).
 - **Output files**: Always write eval results to `/tmp/` (e.g., `/tmp/results.csv`, `/tmp/results.json`) to avoid polluting the repo. Never commit output files to git.
 - Main config: `promptfooconfig.yaml` (repo root; auto-discovered by promptfoo). Separate configs: `promptfooconfig.staging.yaml`, `promptfooconfig.local.yaml`, and `promptfooconfig.openai.yaml` for different environments.
+- Gamaliel HTTP configs request `gpt-5.6-luna`. Every `llm-rubric` is graded by `openai:chat:gpt-5.6-luna` via `defaultTest.options.provider` (promptfoo's grader override). The OpenAI comparison provider is the same model, so it isolates Gamaliel's prompt and guardrails.
 - Test suites: YAML in `eval/tests/`. Register new suites in the relevant config.
 - OpenAI config (`promptfooconfig.openai.yaml`): Includes `passage_citation.yaml`, `nicene_guardrails.yaml`, and `marriage_family_guardrails.yaml`. Excludes tests that need Gamaliel `theology`, `profile`, or `bible_id` behavior.
 - Default profile for Gamaliel configs is `read_regularly`. The four familiarity levels are `new_to_the_bible`, `basic_familiarity`, `read_regularly`, and `study_in_depth`.

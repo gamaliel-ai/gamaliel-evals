@@ -1,4 +1,4 @@
-# Evals against OpenAI GPT-4.1-mini (for comparison with Gamaliel).
+# Evals against OpenAI GPT-5.6-luna (for comparison with Gamaliel).
 # Tests included: passage citation, marriage/family guardrails, Nicene guardrails (general prompts without Gamaliel-specific params).
 # Excludes: theology_compliance, profile_adaptation, language_compliance (these use Gamaliel-specific params).
 # Requires OPENAI_API_KEY in environment (or .env when run via `bun run eval:openai` from repo root).
@@ -10,17 +10,20 @@ extensions:
 evaluateOptions:
   maxConcurrency: 50
 
-description: Chat evals – OpenAI GPT-4.1-mini for comparison (matches Gamaliel default model)
+description: Chat evals – OpenAI GPT-5.6-luna for comparison (same model as Gamaliel)
 
 prompts:
   - "{{ prompt }}"
 
-# OpenAI provider - standard OpenAI API, no Gamaliel-specific params
-# Using gpt-4.1-mini to match Gamaliel's default model (see gamaliel/lib/llm.py)
+# OpenAI provider - standard OpenAI API, no Gamaliel-specific params.
+# Same model as the Gamaliel API request so the comparison isolates prompt and guardrails.
 providers:
-  - openai:chat:gpt-4.1-mini
+  - openai:chat:gpt-5.6-luna
 
 defaultTest:
+  # Grade every llm-rubric with the same model under test.
+  options:
+    provider: openai:chat:gpt-5.6-luna
   vars:
     prompt: "What does the Bible say about love?"
 
