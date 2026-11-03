@@ -180,7 +180,7 @@ Want to run specific tests?
 - **Staging config:** `promptfooconfig.staging.yaml` (internal) - use `bun run eval:staging` or `-c promptfooconfig.staging.yaml`
 - **Local config:** `promptfooconfig.local.yaml` (internal) - use `bun run eval:local` or `-c promptfooconfig.local.yaml`
 - **OpenAI config:** `promptfooconfig.openai.yaml` (comparison) - use `bun run eval:openai` or `-c promptfooconfig.openai.yaml`. Includes `passage_citation.yaml`, `nicene_guardrails.yaml`, and `marriage_family_guardrails.yaml`.
-- **Test files:** `passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `familiarity_guardrails.yaml`, `language_compliance.yaml`, `nicene_guardrails.yaml`, `marriage_family_guardrails.yaml`, `smoke.yaml`
+- **Test files:** `passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `familiarity_guardrails.yaml`, `language_compliance.yaml`, `nicene_guardrails.yaml`, `marriage_family_guardrails.yaml`, `prayer_boundary.yaml`, `smoke.yaml`
 - **Gamaliel configs:** All tests are provider-agnostic and work via template variables (theology, profile, bible_id from test vars). Default profile is `read_regularly`.
 - **OpenAI config:** Passage, Nicene, and marriage/family tests. Excludes suites that need Gamaliel theology, profile, or bible_id behavior.
 
