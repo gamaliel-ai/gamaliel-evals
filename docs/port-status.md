@@ -8,9 +8,9 @@ This doc tracks porting **internal ChatAgent evals** (`evals/chat_agent*`, main 
 
 | Metric | Value |
 |--------|--------|
-| **Eval suites in place** | 8 (smoke, passage-citation, theology, familiarity adaptation, familiarity guardrails, language, Nicene, marriage/family) |
-| **Test files in the main suite** | 7 (`passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `familiarity_guardrails.yaml`, `language_compliance.yaml`, `nicene_guardrails.yaml`, `marriage_family_guardrails.yaml`) |
-| **Total main-suite cases** | 125 (21 passage + 18 theology + 14 familiarity adaptation + 28 familiarity guardrails + 12 language + 12 Nicene + 20 marriage/family). Smoke is separate (1). |
+| **Eval suites in place** | 9 (smoke, passage-citation, theology, familiarity adaptation, familiarity guardrails, language, Nicene, marriage/family, prayer boundary) |
+| **Test files in the main suite** | 8 (`passage_citation.yaml`, `theology_compliance.yaml`, `profile_adaptation.yaml`, `familiarity_guardrails.yaml`, `language_compliance.yaml`, `nicene_guardrails.yaml`, `marriage_family_guardrails.yaml`, `prayer_boundary.yaml`) |
+| **Total main-suite cases** | 130 (21 passage + 18 theology + 14 familiarity adaptation + 28 familiarity guardrails + 12 language + 12 Nicene + 20 marriage/family + 5 prayer boundary). Smoke is separate (1). |
 | **Default profile** | `read_regularly` when a case does not set one |
 | **Configs** | **Four configs:** `promptfooconfig.yaml` (production), `promptfooconfig.staging.yaml` (internal), `promptfooconfig.local.yaml` (internal), `promptfooconfig.openai.yaml` (comparison) |
 | **Default `bun run eval`** | Runs full suite against **production** (all main-suite tests × 1 provider). |
@@ -36,6 +36,7 @@ Evals that only need **prompt + response** (and optional theology/profile/bible_
 | **smoke** | — | Quick validation that API responds | **✅ Ported** | 1 test in `smoke.yaml` |
 | **Nicene guardrails** | — | Core doctrines affirmed unequivocally | **✅ Ported** | 12 tests in `nicene_guardrails.yaml` |
 | **marriage/family guardrails** | — | Marriage, sex, and adversarial framing by theology | **✅ Ported** | 20 tests in `marriage_family_guardrails.yaml` |
+| **prayer boundary** | — | Assistant must not pray for the user; may offer a prayer for them to pray | **✅ Added** | 5 tests in `prayer_boundary.yaml` (not in OpenAI comparison) |
 
 ---
 
@@ -107,7 +108,8 @@ gamaliel-evals/
 │   │   ├── familiarity_guardrails.yaml    # 28 tests
 │   │   ├── language_compliance.yaml       # 12 tests
 │   │   ├── nicene_guardrails.yaml         # 12 tests
-│   │   └── marriage_family_guardrails.yaml # 20 tests
+│   │   ├── marriage_family_guardrails.yaml # 20 tests
+│   │   └── prayer_boundary.yaml           # 5 tests
 │   ├── validate-env.js               # Environment validation hook
 │   ├── theologies.yaml               # Theology definitions (if exists)
 │   └── profiles.yaml                 # Profile definitions (if exists)
@@ -182,6 +184,7 @@ bun run eval:report /tmp/results.json
 | 6 | `eval/tests/language_compliance.yaml` | ✅ Done | 12 | es/ko/pt, contains + js for Hangul |
 | 7 | `eval/tests/nicene_guardrails.yaml` | ✅ Done | 12 | core doctrines; default profile; threshold 1.0 |
 | 8 | `eval/tests/marriage_family_guardrails.yaml` | ✅ Done | 20 | marriage, sex, adversarial framing; threshold 1.0 |
+| 9 | `eval/tests/prayer_boundary.yaml` | ✅ Done | 5 | decline to pray / offer user prayer; not in OpenAI config; threshold 1.0 |
 
 ---
 
