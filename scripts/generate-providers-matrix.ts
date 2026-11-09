@@ -33,7 +33,7 @@ function loadYamlList(filePath: string): string[] {
 const theologies = loadYamlList(THEOLOGIES_PATH);
 const profiles = loadYamlList(PROFILES_PATH);
 
-const baseConfig = `    provider: openai:chat:gpt-4o-mini
+const baseConfig = `    provider: openai:chat:gpt-5.6-luna
     config:
       apiBaseUrl: "https://api.gamaliel.ai/v1"
       passthrough:`;
