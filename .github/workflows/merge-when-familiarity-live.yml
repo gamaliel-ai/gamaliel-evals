@@ -1,0 +1,80 @@
+# Temporary. Merges gamaliel-evals#4 once production serves the Bible
+# familiarity profiles from gamaliel-web#453, then disables itself.
+name: Merge familiarity evals when live
+
+on:
+  schedule:
+    # Twice an hour. GitHub may start a scheduled run later than the clock time.
+    - cron: "17,47 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+jobs:
+  merge-when-live:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge the familiarity eval pull request when production has the new profiles
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: gamaliel-ai/gamaliel-evals
+          PR: "4"
+          EXPECTED_BRANCH: feat/bible-familiarity-evals
+        run: |
+          set -euo pipefail
+
+          meta=$(gh pr view "$PR" --repo "$REPO" --json state,isDraft,headRefName)
+          state=$(echo "$meta" | jq -r .state)
+          head=$(echo "$meta" | jq -r .headRefName)
+          draft=$(echo "$meta" | jq -r .isDraft)
+
+          if [ "$state" != "OPEN" ]; then
+            echo "Pull request #$PR is $state. Disabling this check."
+            gh workflow disable merge-when-familiarity-live.yml --repo "$REPO"
+            exit 0
+          fi
+
+          if [ "$head" != "$EXPECTED_BRANCH" ]; then
+            echo "Pull request #$PR head is $head, expected $EXPECTED_BRANCH. Not merging."
+            exit 1
+          fi
+
+          # Exit 10 means the profiles are not live yet. Any other failure should fail the job.
+          set +e
+          python3 - <<'PY'
+          import json, sys, urllib.request
+          required = {
+              "new_to_the_bible",
+              "basic_familiarity",
+              "read_regularly",
+              "study_in_depth",
+          }
+          with urllib.request.urlopen("https://api.gamaliel.ai/v1/profiles", timeout=30) as response:
+              payload = json.load(response)
+          slugs = {profile["slug"] for profile in payload["profiles"]}
+          missing = sorted(required - slugs)
+          print("production profiles:", ", ".join(sorted(slugs)))
+          if missing:
+              print("waiting for:", ", ".join(missing))
+              sys.exit(10)
+          print("all four familiarity profiles are live")
+          PY
+          status=$?
+          set -e
+          if [ "$status" -eq 10 ]; then
+            echo "Production does not have the familiarity profiles yet. Leaving #$PR in draft."
+            exit 0
+          fi
+          if [ "$status" -ne 0 ]; then
+            exit "$status"
+          fi
+
+          if [ "$draft" = "true" ]; then
+            gh pr ready "$PR" --repo "$REPO"
+          fi
+          gh pr merge "$PR" --repo "$REPO" --merge
+          gh workflow disable merge-when-familiarity-live.yml --repo "$REPO"
+          echo "Merged #$PR and disabled this workflow."

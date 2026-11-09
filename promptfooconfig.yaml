@@ -55,3 +55,4 @@ tests:
   - file://eval/tests/language_compliance.yaml
   - file://eval/tests/nicene_guardrails.yaml
   - file://eval/tests/marriage_family_guardrails.yaml
+  - file://eval/tests/prayer_boundary.yaml
